@@ -1,8 +1,6 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -17,9 +15,8 @@ public class Main extends Application {
         Pane root = FXMLLoader.load(getClass().getResource("/test.fxml"));
 
         primaryStage.setTitle("Awesome app");
-        primaryStage.setScene(new Scene(root, 600, 600));
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
-
     }
 
     public static void main(String[] args) {

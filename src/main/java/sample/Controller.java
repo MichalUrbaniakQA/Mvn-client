@@ -18,9 +18,7 @@ public class Controller implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
 
     @FXML
-    private ListView<String> projectsFromPath, projectsCandidateToMaven;
-    @FXML
-    private RadioButton install, packaage, skipTest, deploy, site, verify, validate, clean, test, compile;
+    private ListView<String> projectsFromPath, projectsCandidateToMaven, mavenOrderCandidate, mavenOrderReadyList;
     @FXML
     private TextField basePathInput, mavenHomePath;
     @FXML
@@ -31,6 +29,9 @@ public class Controller implements Initializable {
     private File[] files;
     private ObservableList<String> itemsWithAllFoldersFromPath = FXCollections.observableArrayList();
     private ObservableList<String> candidateToMavenBuild = FXCollections.observableArrayList();
+    private ObservableList<String> mavenOrderList = FXCollections.observableArrayList();
+    private ObservableList<String> mavenOrderListCandidate = FXCollections.observableArrayList();
+
 
     @FXML
     void saveBasePath(ActionEvent event) {
@@ -60,6 +61,30 @@ public class Controller implements Initializable {
     }
 
     @FXML
+    void mavenOrderSelectCandidate(MouseEvent event) {
+        ObservableList<String> mavenOrder = mavenOrderCandidate.getSelectionModel().getSelectedItems();
+        int index = mavenOrderCandidate.getSelectionModel().getSelectedIndex();
+
+        if (!(mavenOrderListCandidate.containsAll(mavenOrder)))
+            mavenOrderListCandidate.addAll(mavenOrder);
+
+        mavenOrderReadyList.setItems(mavenOrderListCandidate);
+        mavenOrderCandidate.getItems().remove(index);
+    }
+
+    @FXML
+    void mavenOrderSelectReady(MouseEvent event) {
+        ObservableList<String> elementFromClickOnTheListWithCandidateToMavenOrder = mavenOrderReadyList.getSelectionModel().getSelectedItems();
+        int index = mavenOrderReadyList.getSelectionModel().getSelectedIndex();
+
+        if (!(mavenOrderList.containsAll(elementFromClickOnTheListWithCandidateToMavenOrder)))
+            mavenOrderList.addAll(elementFromClickOnTheListWithCandidateToMavenOrder);
+
+        mavenOrderCandidate.setItems(mavenOrderList);
+        mavenOrderReadyList.getItems().remove(index);
+    }
+
+    @FXML
     void mouseClickRemove(MouseEvent event) {
         ObservableList<String> elementFromClickOnTheListWithCandidateToMaven = projectsCandidateToMaven.getSelectionModel().getSelectedItems();
         int index = projectsCandidateToMaven.getSelectionModel().getSelectedIndex();
@@ -71,7 +96,7 @@ public class Controller implements Initializable {
         projectsCandidateToMaven.getItems().remove(index);
     }
 
-    @FXML // D:/Workspace/intelij/qsg1/
+    @FXML
     void mvnBuildButton(ActionEvent event) {
         this.mavenHome = mavenHomePath.getText();
         ArrayList<String> completeListOfCandidate = new ArrayList<String>(projectsCandidateToMaven.getItems());
@@ -96,15 +121,22 @@ public class Controller implements Initializable {
         }
     }
 
-    @Override
+    @Override // D:/Workspace/intelij/qsg1/
     public void initialize(URL location, ResourceBundle resources) {
+        addMavenOrder();
+
         basePathSaveButton.setOnAction(this::saveBasePath);
         projectsFromPath.setOnMouseClicked(this::mouseClick);
         projectsCandidateToMaven.setOnMouseClicked(this::mouseClickRemove);
         mvnBuildButton.setOnAction(this::mvnBuildButton);
-
+        mavenOrderCandidate.setOnMouseClicked(this::mavenOrderSelectCandidate);
+        mavenOrderReadyList.setOnMouseClicked(this::mavenOrderSelectReady);
     }
 
+    private void addMavenOrder(){
+        mavenOrderList.addAll("clean", "validate", "compile", "test", "-DskipTests", "package", "verify", "install", "site", "deploy");
+        mavenOrderCandidate.setItems(mavenOrderList);
+    }
 }
 
 
