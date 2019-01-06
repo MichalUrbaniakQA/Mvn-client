@@ -2,24 +2,26 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
 <!--xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" />-->
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="579.0" prefWidth="732.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
   <AnchorPane layoutX="78.0" layoutY="69.0" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
          <children>
-            <ListView fx:id="projectsFromPath" layoutX="-69.0" layoutY="-10.0" onMouseClicked="#mouseClick" prefHeight="428.0" prefWidth="200.0" />
+            <ListView fx:id="projectsFromPath" layoutX="-64.0" layoutY="-12.0" onMouseClicked="#mouseClick" prefHeight="450.0" prefWidth="195.0" />
          </children></AnchorPane>
-      <TextField fx:id="basePathInput" layoutX="10.0" layoutY="16.0" prefHeight="33.0" prefWidth="364.0" />
-      <Button fx:id="basePathSaveButton" layoutX="644.0" layoutY="16.0" mnemonicParsing="false" onAction="#saveBasePath" prefHeight="33.0" prefWidth="74.0" text="save" />
-      <Button fx:id="mvnBuildButton" layoutX="644.0" layoutY="69.0" mnemonicParsing="false" onAction="#mvnBuildButton" prefHeight="33.0" prefWidth="74.0" text="mvn build" />
-      <ListView fx:id="projectsCandidateToMaven" layoutX="222.0" layoutY="59.0" onMouseClicked="#mouseClickRemove" prefHeight="428.0" prefWidth="193.0" />
-      <TextField fx:id="mavenHomePath" layoutX="387.0" layoutY="16.0" prefHeight="33.0" prefWidth="246.0" />
-      <ListView fx:id="mavenOrderCandidate" layoutX="425.0" layoutY="59.0" onMouseClicked="#mavenOrderSelectCandidate" prefHeight="428.0" prefWidth="99.0" />
-      <ListView fx:id="mavenOrderReadyList" layoutX="534.0" layoutY="59.0" onMouseClicked="#mavenOrderSelectReady" prefHeight="428.0" prefWidth="99.0" />
+      <ListView fx:id="mavenOrderCandidate" layoutX="422.0" layoutY="58.0" onMouseClicked="#mavenOrderSelectCandidate" prefHeight="450.0" prefWidth="120.0" />
+      <ListView fx:id="projectsCandidateToMaven" layoutX="218.0" layoutY="57.0" onMouseClicked="#mouseClickRemove" prefHeight="450.0" prefWidth="195.0" />
+      <Button fx:id="mvnBuildButton" layoutX="684.0" layoutY="60.0" mnemonicParsing="false" onAction="#mvnBuildButton" prefHeight="33.0" prefWidth="74.0" text="mvn build" />
+      <Button fx:id="basePathSaveButton" layoutX="682.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveBasePath" prefHeight="33.0" prefWidth="74.0" text="save" />
+      <ListView fx:id="mavenOrderReadyList" layoutX="551.0" layoutY="59.0" onMouseClicked="#mavenOrderSelectReady" prefHeight="450.0" prefWidth="120.0" />
+      <TextField fx:id="mavenHomePath" layoutX="422.0" layoutY="14.0" prefHeight="33.0" prefWidth="250.0" promptText="enter your mvn path, e.g.: MAVEN_HOME" />
+      <TextField fx:id="basePathInput" layoutX="14.0" layoutY="14.0" prefHeight="33.0" prefWidth="400.0" promptText="enter your path with mvn projects, e.q.: D:/Workspace/intelij" />
+      <TextArea fx:id="mavenBuildResultOutput" editable="false" layoutX="14.0" layoutY="517.0" prefHeight="65.0" prefWidth="400.0" promptText="Build result... If your MAVEN_HOME path is incorrect build can't running" />
    </children>
 </Pane>

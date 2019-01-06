@@ -23,7 +23,12 @@ public class Controller implements Initializable {
     private TextField basePathInput, mavenHomePath;
     @FXML
     private Button basePathSaveButton, mvnBuildButton;
+    @FXML
+    private TextArea mavenBuildResultOutput;
 
+    private StringBuilder orderMaven = new StringBuilder();
+    private StringBuilder resultAppendString = new StringBuilder();
+    private String errorMessage;
     private String basePath;
     private String mavenHome;
     private File[] files;
@@ -100,27 +105,78 @@ public class Controller implements Initializable {
     void mvnBuildButton(ActionEvent event) {
         this.mavenHome = mavenHomePath.getText();
         ArrayList<String> completeListOfCandidate = new ArrayList<String>(projectsCandidateToMaven.getItems());
+        ArrayList<String> completeListOfMavenOrder= new ArrayList<String>(mavenOrderReadyList.getItems());
+
+        for (String s : completeListOfMavenOrder)
+        {
+            orderMaven.append(s);
+            orderMaven.append(" ");
+        }
 
         for (String iterator : completeListOfCandidate) {
-            mvnBuild(iterator);
+            mvnBuild(iterator, orderMaven.toString());
         }
     }
 
-    private void mvnBuild(final String detailsPath){
+    private void mvnBuild(final String detailsPath, final String readyOrderMaven){
         InvocationRequest request = new DefaultInvocationRequest();
         request.setPomFile(new File(basePath + "/" + detailsPath));
-        request.setGoals(Collections.singletonList("clean install -DskipTests"));
+        request.setGoals(Collections.singletonList(readyOrderMaven));
 
         Invoker invoker = new DefaultInvoker();
         invoker.setMavenHome(new File(System.getenv(mavenHome)));
+
         try {
             InvocationResult result = invoker.execute(request);
             invoker.execute(request);
+            if (result.getExitCode() != 0) {
+                if (result.getExecutionException() != null) {
+                    errorMessage = result.getExecutionException().getMessage();
+                    resultAppendString
+                            .append("Project - ")
+                            .append(detailsPath)
+                            .append(errorMessage)
+                            .append(" :Build failed. ")
+                            .append("Exit code: ")
+                            .append(result.getExitCode())
+                            .append("\n");
+                }
+                else {
+                    resultAppendString
+                            .append("Project - ")
+                            .append(detailsPath)
+                            .append(" :Build failed. ")
+                            .append("Exit code: ")
+                            .append(result.getExitCode())
+                            .append("\n");
+                }
+            }
+            if (result.getExitCode() != 1){
+                resultAppendString
+                        .append("Project - ")
+                        .append(detailsPath)
+                        .append(" :Build success. ")
+                        .append("Exit code: ")
+                        .append(result.getExitCode())
+                        .append("\n");
+            }
         } catch (MavenInvocationException e) {
-            e.printStackTrace();
+            errorMessage = e.getMessage();
+            resultAppendString
+                    .append("Project - ")
+                    .append(detailsPath)
+                    .append(errorMessage)
+                    .append("\n");
         }
+        addInvokerResult();
     }
 
+    private void addInvokerResult(){
+        mavenBuildResultOutput.setText(resultAppendString.toString());
+    }
+
+
+    // -Dmaven.multiModuleProjectDirectory=$MAVEN_HOME
     @Override // D:/Workspace/intelij/qsg1/
     public void initialize(URL location, ResourceBundle resources) {
         addMavenOrder();
