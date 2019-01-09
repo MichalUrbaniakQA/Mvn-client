@@ -12,15 +12,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.apache.maven.shared.invoker.*;
 
+import org.springframework.stereotype.Controller;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 
-public class Controller implements Initializable {
-    private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
+@Controller
+public class Controller1 implements Initializable {
 
     @FXML
     private ListView<String> projectsFromPath, projectsCandidateToMaven, mavenOrderCandidate, mavenOrderReadyList;
