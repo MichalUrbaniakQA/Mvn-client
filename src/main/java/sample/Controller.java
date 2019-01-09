@@ -5,13 +5,18 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.apache.maven.shared.invoker.*;
 
 import java.io.File;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 public class Controller implements Initializable {
@@ -37,7 +42,6 @@ public class Controller implements Initializable {
     private ObservableList<String> mavenOrderList = FXCollections.observableArrayList();
     private ObservableList<String> mavenOrderListCandidate = FXCollections.observableArrayList();
 
-
     @FXML
     void saveBasePath(ActionEvent event) {
         this.basePath = basePathInput.getText();
@@ -48,9 +52,13 @@ public class Controller implements Initializable {
                 itemsWithAllFoldersFromPath.add(file.getName());
         }
 
+
         projectsFromPath.setItems(itemsWithAllFoldersFromPath);
         itemsWithAllFoldersFromPath.sorted();
     }
+
+
+    //D:/Workspace/intelij
 
     @FXML
     void mouseClick(MouseEvent event) {
@@ -105,10 +113,9 @@ public class Controller implements Initializable {
     void mvnBuildButton(ActionEvent event) {
         this.mavenHome = mavenHomePath.getText();
         ArrayList<String> completeListOfCandidate = new ArrayList<String>(projectsCandidateToMaven.getItems());
-        ArrayList<String> completeListOfMavenOrder= new ArrayList<String>(mavenOrderReadyList.getItems());
+        ArrayList<String> completeListOfMavenOrder = new ArrayList<String>(mavenOrderReadyList.getItems());
 
-        for (String s : completeListOfMavenOrder)
-        {
+        for (String s : completeListOfMavenOrder) {
             orderMaven.append(s);
             orderMaven.append(" ");
         }
@@ -118,7 +125,7 @@ public class Controller implements Initializable {
         }
     }
 
-    private void mvnBuild(final String detailsPath, final String readyOrderMaven){
+    private void mvnBuild(final String detailsPath, final String readyOrderMaven) {
         InvocationRequest request = new DefaultInvocationRequest();
         request.setPomFile(new File(basePath + "/" + detailsPath));
         request.setGoals(Collections.singletonList(readyOrderMaven));
@@ -136,26 +143,25 @@ public class Controller implements Initializable {
                             .append("Project - ")
                             .append(detailsPath)
                             .append(errorMessage)
-                            .append(" :Build failed. ")
+                            .append(". Build failed. ")
                             .append("Exit code: ")
                             .append(result.getExitCode())
                             .append("\n");
-                }
-                else {
+                } else {
                     resultAppendString
                             .append("Project - ")
                             .append(detailsPath)
-                            .append(" :Build failed. ")
+                            .append(", Build failed. ")
                             .append("Exit code: ")
                             .append(result.getExitCode())
                             .append("\n");
                 }
             }
-            if (result.getExitCode() != 1){
+            if (result.getExitCode() != 1) {
                 resultAppendString
                         .append("Project - ")
                         .append(detailsPath)
-                        .append(" :Build success. ")
+                        .append(". Build success. ")
                         .append("Exit code: ")
                         .append(result.getExitCode())
                         .append("\n");
@@ -171,7 +177,7 @@ public class Controller implements Initializable {
         addInvokerResult();
     }
 
-    private void addInvokerResult(){
+    private void addInvokerResult() {
         mavenBuildResultOutput.setText(resultAppendString.toString());
     }
 
@@ -189,10 +195,14 @@ public class Controller implements Initializable {
         mavenOrderReadyList.setOnMouseClicked(this::mavenOrderSelectReady);
     }
 
-    private void addMavenOrder(){
+    private void addMavenOrder() {
         mavenOrderList.addAll("clean", "validate", "compile", "test", "-DskipTests", "package", "verify", "install", "site", "deploy");
         mavenOrderCandidate.setItems(mavenOrderList);
     }
+
 }
+
+
+
 
 
