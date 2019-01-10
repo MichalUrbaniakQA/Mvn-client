@@ -20,4 +20,11 @@ public enum MvnOrderEnum {
     MvnOrderEnum(String order) {
         this.order = order;
     }
+
+    @Override
+    public String toString() {
+        return "MvnOrderEnum{" +
+                "order='" + order + '\'' +
+                '}';
+    }
 }
