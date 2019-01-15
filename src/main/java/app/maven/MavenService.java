@@ -1,4 +1,4 @@
-package app.service;
+package app.maven;
 
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;

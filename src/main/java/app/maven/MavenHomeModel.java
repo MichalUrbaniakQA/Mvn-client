@@ -1,11 +1,11 @@
-package app.model;
+package app.maven;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
 @Data
 @Component
-public class DirectionBasePath {
+public class MavenHomeModel {
 
-    private String basePath;
+    private String mavenHome;
 }

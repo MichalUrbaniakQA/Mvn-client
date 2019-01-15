@@ -1,7 +1,7 @@
 package app;
 
-import app.service.DirectionPathService;
-import app.service.MavenService;
+import app.direction.DirectionPathService;
+import app.maven.MavenService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,24 +24,25 @@ public class Controller implements Initializable {
     private MavenService mavenService;
 
     @FXML
-    private ListView<String> projectsFromPath, projectsCandidateToMaven, mavenOrderCandidate, mavenOrderReadyList;
+    private ListView<String> projectsFromPathMaven, projectsCandidateToMaven, mavenOrderCandidate, mavenOrderReadyList;
     @FXML
-    private TextField basePathInput, mavenHomePath;
+    private ListView<String> projectsFromPathGradle, projectsCandidateToGradle, gradleOrderCandidate, gradleOrderReadyList;
     @FXML
-    private Button basePathSaveButton, mvnBuildButton;
+    private TextField basePathInput, mavenHomePath, gradleHomePath;
+    @FXML
+    private Button basePathSaveButton, mvnBuildButton, gradleBuildButton;
     @FXML
     private TextArea mavenBuildResultOutput;
 
     @FXML
     void saveBasePath(ActionEvent event) {
-        directionPathService.saveDirectionBasePath(basePathInput, projectsFromPath);
+        directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle);
     }
 
     //   D:/Workspace/intelij
-
     @FXML
     void mouseClick(MouseEvent event) {
-        directionPathService.chooseProject(projectsFromPath, projectsCandidateToMaven);
+        directionPathService.chooseProject(projectsFromPathMaven, projectsCandidateToMaven);
     }
 
     @FXML
@@ -56,7 +57,7 @@ public class Controller implements Initializable {
 
     @FXML
     void mouseClickRemove(MouseEvent event) {
-        directionPathService.removeFromMavenList(projectsCandidateToMaven, projectsFromPath);
+        directionPathService.removeFromMavenList(projectsCandidateToMaven, projectsFromPathMaven);
     }
 
     @FXML
@@ -64,12 +65,17 @@ public class Controller implements Initializable {
         mavenService.mavenBuildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, mavenBuildResultOutput);
     }
 
+    @FXML
+    void gradleBuildButton(ActionEvent event) {
+
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mavenService.addMavenOrder(mavenOrderCandidate);
 
         basePathSaveButton.setOnAction(this::saveBasePath);
-        projectsFromPath.setOnMouseClicked(this::mouseClick);
+        projectsFromPathMaven.setOnMouseClicked(this::mouseClick);
         projectsCandidateToMaven.setOnMouseClicked(this::mouseClickRemove);
         mvnBuildButton.setOnAction(this::mvnBuildButton);
         mavenOrderCandidate.setOnMouseClicked(this::mavenOrderSelectCandidate);
@@ -78,6 +84,3 @@ public class Controller implements Initializable {
 }
 
 // -Dmaven.multiModuleProjectDirectory=$MAVEN_HOME
-
-
-

@@ -1,7 +1,6 @@
-package app.service;
+package app.maven;
 
-import app.model.DirectionBasePath;
-import app.model.MavenHome;
+import app.direction.DirectionBasePathModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -19,9 +18,9 @@ import java.util.Collections;
 public class MavenServiceImpl implements MavenService {
 
     @Autowired
-    private MavenHome mavenHome;
+    private MavenHomeModel mavenHomeModel;
     @Autowired
-    private DirectionBasePath directionBasePath;
+    private DirectionBasePathModel directionBasePathModel;
 
     private ObservableList<String> mavenOrderListCandidate = FXCollections.observableArrayList();
     private ObservableList<String> mavenOrderList = FXCollections.observableArrayList();
@@ -67,7 +66,7 @@ public class MavenServiceImpl implements MavenService {
     public void mavenBuildButton(TextField mavenHomePath, ListView<String> projectsCandidateToMaven, ListView<String> mavenOrderReadyList,
                                  TextArea mavenBuildResultOutput){
 
-        mavenHome.setMavenHome(mavenHomePath.getText());
+        mavenHomeModel.setMavenHome(mavenHomePath.getText());
         ArrayList<String> completeListOfCandidate = new ArrayList<String>(projectsCandidateToMaven.getItems());
         ArrayList<String> completeListOfMavenOrder = new ArrayList<String>(mavenOrderReadyList.getItems());
 
@@ -85,11 +84,11 @@ public class MavenServiceImpl implements MavenService {
     private void mvnBuild(final String detailsPath, final String readyOrderMaven, TextArea mavenBuildResultOutput) {
 
         InvocationRequest request = new DefaultInvocationRequest();
-        request.setPomFile(new File(directionBasePath.getBasePath() + "/" + detailsPath));
+        request.setPomFile(new File(directionBasePathModel.getBasePath() + "/" + detailsPath));
         request.setGoals(Collections.singletonList(readyOrderMaven));
 
         Invoker invoker = new DefaultInvoker();
-        invoker.setMavenHome(new File(System.getenv(mavenHome.getMavenHome())));
+        invoker.setMavenHome(new File(System.getenv(mavenHomeModel.getMavenHome())));
 
         try {
             InvocationResult result = invoker.execute(request);

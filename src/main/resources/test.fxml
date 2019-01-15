@@ -13,15 +13,21 @@
    <children>
   <AnchorPane layoutX="78.0" layoutY="69.0" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
          <children>
-            <ListView fx:id="projectsFromPath" layoutX="-64.0" layoutY="-12.0" onMouseClicked="#mouseClick" prefHeight="450.0" prefWidth="195.0" />
+            <ListView fx:id="projectsFromPathMaven" layoutX="-64.0" layoutY="-12.0" onMouseClicked="#mouseClick" prefHeight="220.0" prefWidth="195.0" />
          </children></AnchorPane>
-      <ListView fx:id="mavenOrderCandidate" layoutX="422.0" layoutY="58.0" onMouseClicked="#mavenOrderSelectCandidate" prefHeight="450.0" prefWidth="120.0" />
-      <ListView fx:id="projectsCandidateToMaven" layoutX="218.0" layoutY="57.0" onMouseClicked="#mouseClickRemove" prefHeight="450.0" prefWidth="195.0" />
-      <Button fx:id="mvnBuildButton" layoutX="684.0" layoutY="60.0" mnemonicParsing="false" onAction="#mvnBuildButton" prefHeight="33.0" prefWidth="74.0" text="mvn build" />
+      <ListView fx:id="mavenOrderCandidate" layoutX="422.0" layoutY="58.0" onMouseClicked="#mavenOrderSelectCandidate" prefHeight="220.0" prefWidth="120.0" />
+      <ListView fx:id="projectsCandidateToMaven" layoutX="218.0" layoutY="57.0" onMouseClicked="#mouseClickRemove" prefHeight="220.0" prefWidth="195.0" />
+      <Button fx:id="mvnBuildButton" layoutX="683.0" layoutY="57.0" mnemonicParsing="false" onAction="#mvnBuildButton" prefHeight="33.0" prefWidth="74.0" text="mvn build" />
       <Button fx:id="basePathSaveButton" layoutX="682.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveBasePath" prefHeight="33.0" prefWidth="74.0" text="submit" />
-      <ListView fx:id="mavenOrderReadyList" layoutX="551.0" layoutY="59.0" onMouseClicked="#mavenOrderSelectReady" prefHeight="450.0" prefWidth="120.0" />
-      <TextField fx:id="mavenHomePath" layoutX="422.0" layoutY="14.0" prefHeight="33.0" prefWidth="250.0" promptText="enter your mvn path, e.g.: MAVEN_HOME" />
-      <TextField fx:id="basePathInput" layoutX="14.0" layoutY="14.0" prefHeight="33.0" prefWidth="400.0" promptText="enter your path with mvn projects, e.q.: D:/Workspace/intelij" />
+      <ListView fx:id="mavenOrderReadyList" layoutX="551.0" layoutY="59.0" onMouseClicked="#mavenOrderSelectReady" prefHeight="220.0" prefWidth="120.0" />
+      <TextField fx:id="mavenHomePath" layoutX="422.0" layoutY="14.0" prefHeight="33.0" prefWidth="120.0" promptText="MAVEN_HOME" />
+      <TextField fx:id="basePathInput" layoutX="14.0" layoutY="14.0" prefHeight="33.0" prefWidth="400.0" promptText="e.q.: D:/Workspace/intelij" />
       <TextArea fx:id="mavenBuildResultOutput" editable="false" layoutX="14.0" layoutY="517.0" prefHeight="65.0" prefWidth="400.0" promptText="Build result... If your MAVEN_HOME path is incorrect build can't running" />
+      <ListView fx:id="projectsFromPathGradle" layoutX="14.0" layoutY="288.0" onMouseClicked="#mouseClick" prefHeight="220.0" prefWidth="195.0" />
+      <ListView fx:id="projectsCandidateToGradle" layoutX="218.0" layoutY="288.0" onMouseClicked="#mouseClickRemove" prefHeight="220.0" prefWidth="195.0" />
+      <ListView fx:id="gradleOrderCandidate" layoutX="422.0" layoutY="288.0" onMouseClicked="#mavenOrderSelectCandidate" prefHeight="220.0" prefWidth="120.0" />
+      <ListView fx:id="gradleOrderReadyList" layoutX="551.0" layoutY="288.0" onMouseClicked="#mavenOrderSelectReady" prefHeight="220.0" prefWidth="120.0" />
+      <TextField fx:id="gradleHomePath" layoutX="551.0" layoutY="14.0" prefHeight="33.0" prefWidth="120.0" promptText="GRADLE_HOME" />
+      <Button fx:id="gradleBuildButton" layoutX="683.0" layoutY="100.0" mnemonicParsing="false" onAction="#gradleBuildButton" prefHeight="33.0" prefWidth="74.0" text="grd build" />
    </children>
 </Pane>

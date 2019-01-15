@@ -1,7 +1,6 @@
-package app.service;
+package app.direction;
 
 import app.Controller;
-import app.model.DirectionBasePath;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -10,35 +9,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DirectionPathServiceImpl implements DirectionPathService {
 
     @Autowired
-    private DirectionBasePath directionBasePath;
+    private DirectionBasePathModel directionBasePathModel;
     @Autowired
     private Controller controller;
 
-    private File[] files;
     private ObservableList<String> itemsWithAllFoldersFromPath = FXCollections.observableArrayList();
+    private ObservableList<String> itemsWithMavenProject = FXCollections.observableArrayList();
+    private ObservableList<String> itemsWithGradleProject = FXCollections.observableArrayList();
     private ObservableList<String> candidateToMavenBuild = FXCollections.observableArrayList();
 
-    @Override
-    public void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPath) {
-        directionBasePath.setBasePath(basePathInput.getText());
-        files = new File(directionBasePath.getBasePath()).listFiles();
 
-        for (File file : files) {
-            if (!(itemsWithAllFoldersFromPath.contains(file.getName())))
-                itemsWithAllFoldersFromPath.add(file.getName());
+    private ObservableList<String> candidateToGradleBuild = FXCollections.observableArrayList();
+
+    @Override
+    public void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPathMaven, ListView<String> projectsFromPathGradle) {
+        directionBasePathModel.setBasePath(basePathInput.getText());
+
+        File currentDir = new File(directionBasePathModel.getBasePath());
+        List<Path> subfolder = new LinkedList<>();
+        try {
+            subfolder = Files.walk(currentDir.toPath(), 2)
+                    .filter(Files::isRegularFile)
+                    .filter(folder -> folder.getFileName().toString().contains("build.gradle"))
+                    .map(Path::getParent)
+                    .distinct()
+                    .map(Path::getFileName)
+                    .collect(Collectors.toList());
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        projectsFromPath.setItems(itemsWithAllFoldersFromPath);
-        itemsWithAllFoldersFromPath.sorted();
+        Path[] stockArr = new Path[subfolder.size()];
+        stockArr = subfolder.toArray(stockArr);
+
+        for(Path s : stockArr){
+            itemsWithMavenProject.add(s.toFile().getName());
+        }
+
+        projectsFromPathMaven.setItems(itemsWithMavenProject);
+  //      itemsWithAllFoldersFromPath.sorted();
     }
 
+
     @Override
-    public void chooseProject(ListView<String> projectsFromPath, ListView<String> projectsCandidateToMaven){
+    public void chooseProject(ListView<String> projectsFromPath, ListView<String> projectsCandidateToMaven) {
 
         ObservableList<String> elementFromClickOnTheListWithProjectFromPath = projectsFromPath.getSelectionModel().getSelectedItems();
         int index = projectsFromPath.getSelectionModel().getSelectedIndex();
