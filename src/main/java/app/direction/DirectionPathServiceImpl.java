@@ -1,6 +1,5 @@
 package app.direction;
 
-import app.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -12,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,19 +20,17 @@ public class DirectionPathServiceImpl implements DirectionPathService {
 
     @Autowired
     private DirectionBasePathModel directionBasePathModel;
-    @Autowired
-    private Controller controller;
 
-    private ObservableList<String> itemsWithAllFoldersFromPath = FXCollections.observableArrayList();
     private ObservableList<String> itemsWithMavenProject = FXCollections.observableArrayList();
-    private ObservableList<String> itemsWithGradleProject = FXCollections.observableArrayList();
     private ObservableList<String> candidateToMavenBuild = FXCollections.observableArrayList();
 
-
+    private ObservableList<String> itemsWithGradleProject = FXCollections.observableArrayList();
     private ObservableList<String> candidateToGradleBuild = FXCollections.observableArrayList();
 
     @Override
-    public void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPathMaven, ListView<String> projectsFromPathGradle) {
+    public void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPathMaven,
+                                      ListView<String> projectsFromPathGradle, final String value) {
+
         directionBasePathModel.setBasePath(basePathInput.getText());
 
         File currentDir = new File(directionBasePathModel.getBasePath());
@@ -42,7 +38,7 @@ public class DirectionPathServiceImpl implements DirectionPathService {
         try {
             subfolder = Files.walk(currentDir.toPath(), 2)
                     .filter(Files::isRegularFile)
-                    .filter(folder -> folder.getFileName().toString().contains("build.gradle"))
+                    .filter(folder -> folder.getFileName().toString().contains(value))
                     .map(Path::getParent)
                     .distinct()
                     .map(Path::getFileName)
@@ -55,12 +51,20 @@ public class DirectionPathServiceImpl implements DirectionPathService {
         Path[] stockArr = new Path[subfolder.size()];
         stockArr = subfolder.toArray(stockArr);
 
-        for(Path s : stockArr){
-            itemsWithMavenProject.add(s.toFile().getName());
+        switch (value) {
+            case "pom.xml":
+                for (Path s : stockArr) {
+                    itemsWithMavenProject.add(s.toFile().getName());
+                }
+                projectsFromPathMaven.setItems(itemsWithMavenProject);
+                break;
+            case "build.gradle":
+                for (Path s : stockArr) {
+                    itemsWithGradleProject.add(s.toFile().getName());
+                }
+                projectsFromPathGradle.setItems(itemsWithGradleProject);
+                break;
         }
-
-        projectsFromPathMaven.setItems(itemsWithMavenProject);
-  //      itemsWithAllFoldersFromPath.sorted();
     }
 
 
@@ -68,26 +72,23 @@ public class DirectionPathServiceImpl implements DirectionPathService {
     public void chooseProject(ListView<String> projectsFromPath, ListView<String> projectsCandidateToMaven) {
 
         ObservableList<String> elementFromClickOnTheListWithProjectFromPath = projectsFromPath.getSelectionModel().getSelectedItems();
-        int index = projectsFromPath.getSelectionModel().getSelectedIndex();
 
         if (!(candidateToMavenBuild.containsAll(elementFromClickOnTheListWithProjectFromPath)))
             candidateToMavenBuild.addAll(elementFromClickOnTheListWithProjectFromPath);
 
         projectsCandidateToMaven.setItems(candidateToMavenBuild);
-        projectsFromPath.getItems().remove(index);
         candidateToMavenBuild.sorted();
     }
 
     @Override
-    public void removeFromMavenList(ListView<String> projectsCandidateToMaven, ListView<String> projectsFromPath) {
+    public void chooseProject1(ListView<String> projectsFromPath, ListView<String> projectsCandidateToGradle) {
 
-        ObservableList<String> elementFromClickOnTheListWithCandidateToMaven = projectsCandidateToMaven.getSelectionModel().getSelectedItems();
-        int index = projectsCandidateToMaven.getSelectionModel().getSelectedIndex();
+        ObservableList<String> elementFromClickOnTheListWithProjectFromPath = projectsFromPath.getSelectionModel().getSelectedItems();
 
-        if (!(itemsWithAllFoldersFromPath.containsAll(elementFromClickOnTheListWithCandidateToMaven)))
-            itemsWithAllFoldersFromPath.addAll(elementFromClickOnTheListWithCandidateToMaven);
+        if (!(candidateToGradleBuild.containsAll(elementFromClickOnTheListWithProjectFromPath)))
+            candidateToGradleBuild.addAll(elementFromClickOnTheListWithProjectFromPath);
 
-        projectsFromPath.setItems(itemsWithAllFoldersFromPath);
-        projectsCandidateToMaven.getItems().remove(index);
+        projectsCandidateToGradle.setItems(candidateToGradleBuild);
+        candidateToGradleBuild.sorted();
     }
 }

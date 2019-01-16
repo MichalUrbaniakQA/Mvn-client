@@ -5,7 +5,9 @@ import javafx.scene.control.TextField;
 
 public interface DirectionPathService {
 
-    void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPathMaven, ListView<String> projectsFromPathGradle);
+    void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPathMaven,
+                               ListView<String> projectsFromPathGradle, final String value);
+
     void chooseProject(ListView<String> projectsFromPathMaven, ListView<String> projectsCandidateToMaven);
-    void removeFromMavenList(ListView<String> projectsCandidateToMaven, ListView<String> projectsFromPathMaven);
+    void chooseProject1(ListView<String> projectsFromPathMaven, ListView<String> projectsCandidateToMaven);
 }

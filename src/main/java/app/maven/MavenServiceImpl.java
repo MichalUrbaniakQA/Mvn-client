@@ -138,4 +138,11 @@ public class MavenServiceImpl implements MavenService {
 
         mavenBuildResultOutput.setText(resultAppendString.toString());
     }
+
+    @Override
+    public void removeFromMavenList(ListView<String> projectsCandidateToMaven, ListView<String> projectsFromPathMaven) {
+
+        int index = projectsCandidateToMaven.getSelectionModel().getSelectedIndex();
+        projectsCandidateToMaven.getItems().remove(index);
+    }
 }

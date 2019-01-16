@@ -1,6 +1,7 @@
 package app;
 
 import app.direction.DirectionPathService;
+import app.gradle.GradleService;
 import app.maven.MavenService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,13 +37,15 @@ public class Controller implements Initializable {
 
     @FXML
     void saveBasePath(ActionEvent event) {
-        directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle);
+        directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "pom.xml");
+        directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "build.gradle");
     }
 
     //   D:/Workspace/intelij
     @FXML
     void mouseClick(MouseEvent event) {
         directionPathService.chooseProject(projectsFromPathMaven, projectsCandidateToMaven);
+        directionPathService.chooseProject1(projectsFromPathGradle, projectsCandidateToGradle);
     }
 
     @FXML
@@ -57,7 +60,7 @@ public class Controller implements Initializable {
 
     @FXML
     void mouseClickRemove(MouseEvent event) {
-        directionPathService.removeFromMavenList(projectsCandidateToMaven, projectsFromPathMaven);
+        mavenService.removeFromMavenList(projectsCandidateToMaven, projectsFromPathMaven);
     }
 
     @FXML
