@@ -1,5 +1,6 @@
 package app.util;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;

@@ -2,6 +2,7 @@ package app;
 
 import app.direction.DirectionPathService;
 import app.gradle.GradleService;
+import app.maven.MavenHomeModel;
 import app.maven.MavenService;
 import app.util.CommonService;
 import javafx.event.ActionEvent;
@@ -26,6 +27,8 @@ public class Controller implements Initializable {
     private CommonService commonService;
     @Autowired
     private GradleService gradleService;
+    @Autowired
+    private MavenHomeModel mavenHomeModel;
 
     @FXML
     private ListView<String> projectsFromPathMaven, projectsCandidateToMaven, mavenOrderCandidate, mavenOrderReadyList;
@@ -36,7 +39,7 @@ public class Controller implements Initializable {
     @FXML
     private Button basePathSaveButton, mvnBuildButton, gradleBuildButton;
     @FXML
-    private TextArea mavenBuildResultOutput;
+    private TextArea resultOutput;
 
     @FXML
     void saveBasePath(ActionEvent event) {
@@ -86,7 +89,7 @@ public class Controller implements Initializable {
 
     @FXML
     void mvnBuildButton(ActionEvent event) {
-        commonService.buildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, mavenBuildResultOutput);
+        commonService.buildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, resultOutput);
     }
 
     @FXML
