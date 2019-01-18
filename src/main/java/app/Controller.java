@@ -3,6 +3,7 @@ package app;
 import app.direction.DirectionPathService;
 import app.gradle.GradleService;
 import app.maven.MavenService;
+import app.util.CommonService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,7 +23,9 @@ public class Controller implements Initializable {
     @Autowired
     private DirectionPathService directionPathService;
     @Autowired
-    private MavenService mavenService;
+    private CommonService commonService;
+    @Autowired
+    private GradleService gradleService;
 
     @FXML
     private ListView<String> projectsFromPathMaven, projectsCandidateToMaven, mavenOrderCandidate, mavenOrderReadyList;
@@ -43,29 +46,47 @@ public class Controller implements Initializable {
 
     //   D:/Workspace/intelij
     @FXML
-    void mouseClick(MouseEvent event) {
-        directionPathService.chooseProject(projectsFromPathMaven, projectsCandidateToMaven);
-        directionPathService.chooseProject1(projectsFromPathGradle, projectsCandidateToGradle);
+    void addMavenProjectToListCandidate(MouseEvent event) {
+        commonService.candidateProjectToBuild(projectsFromPathMaven, projectsCandidateToMaven);
+    }
+
+    @FXML
+    void removeMavenProjectCandidate(MouseEvent event) {
+        commonService.finalProjectToBuild(projectsCandidateToMaven);
     }
 
     @FXML
     void mavenOrderSelectCandidate(MouseEvent event) {
-        mavenService.chooseProjectToBuild(mavenOrderCandidate, mavenOrderReadyList);
+        commonService.candidateCommandToBuild(mavenOrderCandidate, mavenOrderReadyList);
     }
 
     @FXML
     void mavenOrderSelectReady(MouseEvent event) {
-        mavenService.finalListToBuildMaven(mavenOrderCandidate, mavenOrderReadyList);
+        commonService.finalCommandToBuild(mavenOrderCandidate, mavenOrderReadyList);
     }
 
     @FXML
-    void mouseClickRemove(MouseEvent event) {
-        mavenService.removeFromMavenList(projectsCandidateToMaven, projectsFromPathMaven);
+    void mouseClickGradle(MouseEvent event) {
+        gradleService.chooseProject(projectsFromPathGradle, projectsCandidateToGradle);
+    }
+
+    @FXML
+    void gradleOrderSelectCandidate(MouseEvent event) {
+    }
+
+    @FXML
+    void gradleOrderSelectReady(MouseEvent event) {
+    }
+
+
+    @FXML
+    void mouseClickRemoveGradle(MouseEvent event) {
+        gradleService.removeFromGradleList(projectsCandidateToGradle);
     }
 
     @FXML
     void mvnBuildButton(ActionEvent event) {
-        mavenService.mavenBuildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, mavenBuildResultOutput);
+        commonService.buildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, mavenBuildResultOutput);
     }
 
     @FXML
@@ -75,11 +96,13 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        mavenService.addMavenOrder(mavenOrderCandidate);
+        commonService.addCommand(mavenOrderCandidate);
 
         basePathSaveButton.setOnAction(this::saveBasePath);
-        projectsFromPathMaven.setOnMouseClicked(this::mouseClick);
-        projectsCandidateToMaven.setOnMouseClicked(this::mouseClickRemove);
+        projectsFromPathMaven.setOnMouseClicked(this::addMavenProjectToListCandidate);
+        projectsFromPathGradle.setOnMouseClicked(this::mouseClickGradle);
+        projectsCandidateToMaven.setOnMouseClicked(this::removeMavenProjectCandidate);
+        projectsCandidateToGradle.setOnMouseClicked(this::mouseClickRemoveGradle);
         mvnBuildButton.setOnAction(this::mvnBuildButton);
         mavenOrderCandidate.setOnMouseClicked(this::mavenOrderSelectCandidate);
         mavenOrderReadyList.setOnMouseClicked(this::mavenOrderSelectReady);

@@ -22,10 +22,7 @@ public class DirectionPathServiceImpl implements DirectionPathService {
     private DirectionBasePathModel directionBasePathModel;
 
     private ObservableList<String> itemsWithMavenProject = FXCollections.observableArrayList();
-    private ObservableList<String> candidateToMavenBuild = FXCollections.observableArrayList();
-
     private ObservableList<String> itemsWithGradleProject = FXCollections.observableArrayList();
-    private ObservableList<String> candidateToGradleBuild = FXCollections.observableArrayList();
 
     @Override
     public void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPathMaven,
@@ -65,30 +62,5 @@ public class DirectionPathServiceImpl implements DirectionPathService {
                 projectsFromPathGradle.setItems(itemsWithGradleProject);
                 break;
         }
-    }
-
-
-    @Override
-    public void chooseProject(ListView<String> projectsFromPath, ListView<String> projectsCandidateToMaven) {
-
-        ObservableList<String> elementFromClickOnTheListWithProjectFromPath = projectsFromPath.getSelectionModel().getSelectedItems();
-
-        if (!(candidateToMavenBuild.containsAll(elementFromClickOnTheListWithProjectFromPath)))
-            candidateToMavenBuild.addAll(elementFromClickOnTheListWithProjectFromPath);
-
-        projectsCandidateToMaven.setItems(candidateToMavenBuild);
-        candidateToMavenBuild.sorted();
-    }
-
-    @Override
-    public void chooseProject1(ListView<String> projectsFromPath, ListView<String> projectsCandidateToGradle) {
-
-        ObservableList<String> elementFromClickOnTheListWithProjectFromPath = projectsFromPath.getSelectionModel().getSelectedItems();
-
-        if (!(candidateToGradleBuild.containsAll(elementFromClickOnTheListWithProjectFromPath)))
-            candidateToGradleBuild.addAll(elementFromClickOnTheListWithProjectFromPath);
-
-        projectsCandidateToGradle.setItems(candidateToGradleBuild);
-        candidateToGradleBuild.sorted();
     }
 }
