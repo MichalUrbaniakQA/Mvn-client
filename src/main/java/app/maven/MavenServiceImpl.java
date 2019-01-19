@@ -22,6 +22,8 @@ public class MavenServiceImpl implements CommonService {
     private MavenHomeModel mavenHomeModel;
     @Autowired
     private DirectionBasePathModel directionBasePathModel;
+    @Autowired
+    private MavenInvokerService mavenInvokerService;
 
     private ObservableList<String> finalCommandList = FXCollections.observableArrayList();
     private ObservableList<String> candidateCommandList = FXCollections.observableArrayList();
@@ -76,7 +78,8 @@ public class MavenServiceImpl implements CommonService {
         ArrayList<String> completeListOfCandidate = new ArrayList<>(projectsCandidate.getItems());
 
         for (String iterator : completeListOfCandidate) {
-            mvnBuild(iterator, commandMaven.toString(), resultOutput);
+//            mvnBuild(iterator, commandMaven.toString(), resultOutput);
+            mavenInvokerService.mvnBuild(resultAppendString, iterator, commandMaven.toString(), resultOutput, errorMessage);
         }
     }
 
