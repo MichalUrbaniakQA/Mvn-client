@@ -1,0 +1,3 @@
+mavenPath-MAVEN_HOME
+gradlePath-GRADLE_HOME
+projectsPath-D:/Workspace/intelij

@@ -1,9 +1,8 @@
 package app.maven;
 
-import app.direction.DirectionBasePathModel;
+import app.util.FileRead;
 import javafx.scene.control.TextArea;
 import org.apache.maven.shared.invoker.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -11,11 +10,6 @@ import java.util.Collections;
 
 @Service
 class MavenInvokerServiceImpl implements MavenInvokerService {
-
-    @Autowired
-    private DirectionBasePathModel directionBasePathModel;
-    @Autowired
-    private MavenHomeModel mavenHomeModel;
 
     @Override
     public void mvnBuild(StringBuilder resultAppendString, final String detailsPath, final String commandFinal, TextArea resultOutput, String errorMessage) {
@@ -37,7 +31,7 @@ class MavenInvokerServiceImpl implements MavenInvokerService {
 
     private InvocationRequest setInvocationRequest(final String detailsPath, final String commandFinal){
         InvocationRequest request = new DefaultInvocationRequest();
-        request.setPomFile(new File(directionBasePathModel.getBasePath() + "/" + detailsPath));
+        request.setPomFile(new File(FileRead.PROJECTS_PATH + "/" + detailsPath));
         request.setGoals(Collections.singletonList(commandFinal));
 
         return request;
@@ -45,7 +39,7 @@ class MavenInvokerServiceImpl implements MavenInvokerService {
 
     private Invoker invoker(){
         Invoker invoker = new DefaultInvoker();
-        invoker.setMavenHome(new File(System.getenv(mavenHomeModel.getMavenHome())));
+        invoker.setMavenHome(new File(System.getenv(FileRead.MAVEN_PATH)));
 
         return invoker;
     }

@@ -1,10 +1,10 @@
 package app.direction;
 
+import app.util.FileRead;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -18,9 +18,6 @@ import java.util.stream.Collectors;
 @Service
 public class DirectionPathServiceImpl implements DirectionPathService {
 
-    @Autowired
-    private DirectionBasePathModel directionBasePathModel;
-
     private ObservableList<String> itemsWithMavenProject = FXCollections.observableArrayList();
     private ObservableList<String> itemsWithGradleProject = FXCollections.observableArrayList();
 
@@ -28,9 +25,9 @@ public class DirectionPathServiceImpl implements DirectionPathService {
     public void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPathMaven,
                                       ListView<String> projectsFromPathGradle, final String value) {
 
-        directionBasePathModel.setBasePath(basePathInput.getText());
+        FileRead.PROJECTS_PATH = basePathInput.getText();
 
-        File currentDir = new File(directionBasePathModel.getBasePath());
+        File currentDir = new File(FileRead.PROJECTS_PATH);
         List<Path> subfolder = new LinkedList<>();
         try {
             subfolder = Files.walk(currentDir.toPath(), 2)

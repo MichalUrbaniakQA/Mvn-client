@@ -1,27 +1,19 @@
 package app.maven;
 
-import app.direction.DirectionBasePathModel;
 import app.util.CommonService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import org.apache.maven.shared.invoker.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Service
 public class MavenServiceImpl implements CommonService {
 
-    @Autowired
-    private MavenHomeModel mavenHomeModel;
-    @Autowired
-    private DirectionBasePathModel directionBasePathModel;
     @Autowired
     private MavenInvokerService mavenInvokerService;
 
@@ -68,8 +60,6 @@ public class MavenServiceImpl implements CommonService {
 
     @Override
     public void buildButton(TextField homePath, ListView<String> projectsCandidate, ListView<String> commandFinal, TextArea resultOutput) {
-        mavenHomeModel.setMavenHome(homePath.getText());
-
         appendMavenCommand(commandFinal);
         executeMavenCommand(projectsCandidate, resultOutput);
     }

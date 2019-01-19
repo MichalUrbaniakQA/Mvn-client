@@ -2,9 +2,8 @@ package app;
 
 import app.direction.DirectionPathService;
 import app.gradle.GradleService;
-import app.maven.MavenHomeModel;
-import app.maven.MavenService;
 import app.util.CommonService;
+import app.util.FileRead;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,7 +27,7 @@ public class Controller implements Initializable {
     @Autowired
     private GradleService gradleService;
     @Autowired
-    private MavenHomeModel mavenHomeModel;
+    private FileRead fileRead;
 
     @FXML
     private ListView<String> projectsFromPathMaven, projectsCandidateToMaven, mavenOrderCandidate, mavenOrderReadyList;
@@ -47,7 +46,6 @@ public class Controller implements Initializable {
         directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "build.gradle");
     }
 
-    //   D:/Workspace/intelij
     @FXML
     void addMavenProjectToListCandidate(MouseEvent event) {
         commonService.candidateProjectToBuild(projectsFromPathMaven, projectsCandidateToMaven);
@@ -99,9 +97,11 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setValueTo();
         commonService.addCommand(mavenOrderCandidate);
 
         basePathSaveButton.setOnAction(this::saveBasePath);
+
         projectsFromPathMaven.setOnMouseClicked(this::addMavenProjectToListCandidate);
         projectsFromPathGradle.setOnMouseClicked(this::mouseClickGradle);
         projectsCandidateToMaven.setOnMouseClicked(this::removeMavenProjectCandidate);
@@ -110,6 +110,11 @@ public class Controller implements Initializable {
         mavenOrderCandidate.setOnMouseClicked(this::mavenOrderSelectCandidate);
         mavenOrderReadyList.setOnMouseClicked(this::mavenOrderSelectReady);
     }
-}
 
-// -Dmaven.multiModuleProjectDirectory=$MAVEN_HOME
+    private void setValueTo() {
+        fileRead.setConfigFromFile("config.txt");
+        basePathInput.setText(FileRead.PROJECTS_PATH);
+        mavenHomePath.setText(FileRead.MAVEN_PATH);
+        gradleHomePath.setText(FileRead.GRADLE_PATH);
+    }
+}
