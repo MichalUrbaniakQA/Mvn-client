@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import lombok.Data;
 import org.apache.maven.shared.invoker.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,7 @@ public class MavenServiceImpl implements CommonService {
 
     private StringBuilder commandMaven = new StringBuilder();
     private StringBuilder resultAppendString = new StringBuilder();
+
     private String errorMessage;
 
     @Override
@@ -68,11 +68,11 @@ public class MavenServiceImpl implements CommonService {
     public void buildButton(TextField homePath, ListView<String> projectsCandidate, ListView<String> commandFinal, TextArea resultOutput) {
         mavenHomeModel.setMavenHome(homePath.getText());
 
-        executeMavenCommand(projectsCandidate, resultOutput);
         appendMavenCommand(commandFinal);
+        executeMavenCommand(projectsCandidate, resultOutput);
     }
 
-    private void executeMavenCommand(ListView<String> projectsCandidate, TextArea resultOutput){
+    private void executeMavenCommand(ListView<String> projectsCandidate, TextArea resultOutput) {
         ArrayList<String> completeListOfCandidate = new ArrayList<>(projectsCandidate.getItems());
 
         for (String iterator : completeListOfCandidate) {
@@ -80,7 +80,7 @@ public class MavenServiceImpl implements CommonService {
         }
     }
 
-    private void appendMavenCommand(ListView<String> commandFinal){
+    private void appendMavenCommand(ListView<String> commandFinal) {
         ArrayList<String> completeListOfMavenCommand = new ArrayList<>(commandFinal.getItems());
 
         for (String s : completeListOfMavenCommand) {
@@ -89,48 +89,32 @@ public class MavenServiceImpl implements CommonService {
         }
     }
 
-    private void mvnBuild(final String detailsPath, final String readyOrderMaven, TextArea resultOutput) {
-
+    private InvocationRequest setInvocationRequest(final String detailsPath, final String commandFinal){
         InvocationRequest request = new DefaultInvocationRequest();
         request.setPomFile(new File(directionBasePathModel.getBasePath() + "/" + detailsPath));
-        request.setGoals(Collections.singletonList(readyOrderMaven));
+        request.setGoals(Collections.singletonList(commandFinal));
 
+        return request;
+    }
+
+    private Invoker invoker(){
         Invoker invoker = new DefaultInvoker();
         invoker.setMavenHome(new File(System.getenv(mavenHomeModel.getMavenHome())));
 
+        return invoker;
+    }
+
+    private InvocationResult invocationResult(final String detailsPath, final String commandFinal) throws MavenInvocationException {
+        return invoker().execute(setInvocationRequest(detailsPath, commandFinal));
+    }
+
+
+    private void mvnBuild(final String detailsPath, final String commandFinal, TextArea resultOutput) {
         try {
-            InvocationResult result = invoker.execute(request);
-            invoker.execute(request);
-            if (result.getExitCode() != 0) {
-                if (result.getExecutionException() != null) {
-                    errorMessage = result.getExecutionException().getMessage();
-                    resultAppendString
-                            .append("Project - ")
-                            .append(detailsPath)
-                            .append(errorMessage)
-                            .append(". Build failed. ")
-                            .append("Exit code: ")
-                            .append(result.getExitCode())
-                            .append("\n");
-                } else {
-                    resultAppendString
-                            .append("Project - ")
-                            .append(detailsPath)
-                            .append(", Build failed. ")
-                            .append("Exit code: ")
-                            .append(result.getExitCode())
-                            .append("\n");
-                }
-            }
-            if (result.getExitCode() != 1) {
-                resultAppendString
-                        .append("Project - ")
-                        .append(detailsPath)
-                        .append(". Build success. ")
-                        .append("Exit code: ")
-                        .append(result.getExitCode())
-                        .append("\n");
-            }
+            invoker().execute(setInvocationRequest(detailsPath, commandFinal));
+
+            exitCodeStatus(resultAppendString, invocationResult(detailsPath, commandFinal), detailsPath);
+
         } catch (MavenInvocationException e) {
             errorMessage = e.getMessage();
             resultAppendString
@@ -142,27 +126,68 @@ public class MavenServiceImpl implements CommonService {
         addInvokerResult(resultOutput);
     }
 
+    private void exitCodeStatus(StringBuilder resultAppendString, InvocationResult result, String detailsPath){
+        switch (result.getExitCode()){
+            case 1:
+                exitCodeFail(resultAppendString, result, detailsPath);
+                break;
+            case 0:
+                exitCodeSuccess(resultAppendString, result, detailsPath);
+                break;
+        }
+    }
+
+    private void exitCodeSuccess(StringBuilder resultAppendString, InvocationResult result, String detailsPath) {
+        resultAppendString
+                .append("Project - ")
+                .append(detailsPath)
+                .append(". Build success. ")
+                .append("Exit code: ")
+                .append(result.getExitCode())
+                .append("\n");
+    }
+
+    private void exitCodeFail(StringBuilder resultAppendString, InvocationResult result, String detailsPath) {
+        if (result.getExecutionException() != null) {
+            errorMessage = result.getExecutionException().getMessage();
+            resultAppendString
+                    .append("Project - ")
+                    .append(detailsPath)
+                    .append(errorMessage)
+                    .append(". Build failed. ")
+                    .append("Exit code: ")
+                    .append(result.getExitCode())
+                    .append("\n");
+        } else {
+            resultAppendString
+                    .append("Project - ")
+                    .append(detailsPath)
+                    .append(errorMessage)
+                    .append(". Build failed. ")
+                    .append("Exit code: ")
+                    .append(result.getExitCode())
+                    .append("\n");
+        }
+    }
+
     private void addInvokerResult(TextArea resultOutput) {
         resultOutput.setText(resultAppendString.toString());
     }
 
-
-    ////////////////////////////////////////////////////////////////////////////
-
-    private int selectedIndex(ListView<String> list){
+    private int selectedIndex(ListView<String> list) {
         return list.getSelectionModel().getSelectedIndex();
     }
 
-    private ObservableList<String> getSelectedItems(ListView<String> list){
+    private ObservableList<String> getSelectedItems(ListView<String> list) {
         return list.getSelectionModel().getSelectedItems();
     }
 
-    private void addElementToList(ObservableList<String> storeList, ListView<String> guiList){
+    private void addElementToList(ObservableList<String> storeList, ListView<String> guiList) {
         if (!(storeList.containsAll(getSelectedItems(guiList))))
             storeList.addAll(getSelectedItems(guiList));
     }
 
-    private void removeElement(ListView<String> listWithElement, int elementToRemove){
+    private void removeElement(ListView<String> listWithElement, int elementToRemove) {
         listWithElement.getItems().remove(elementToRemove);
     }
 }
