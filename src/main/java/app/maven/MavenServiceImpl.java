@@ -78,7 +78,6 @@ public class MavenServiceImpl implements CommonService {
         ArrayList<String> completeListOfCandidate = new ArrayList<>(projectsCandidate.getItems());
 
         for (String iterator : completeListOfCandidate) {
-//            mvnBuild(iterator, commandMaven.toString(), resultOutput);
             mavenInvokerService.mvnBuild(resultAppendString, iterator, commandMaven.toString(), resultOutput, errorMessage);
         }
     }
@@ -90,91 +89,6 @@ public class MavenServiceImpl implements CommonService {
             commandMaven.append(s);
             commandMaven.append(" ");
         }
-    }
-
-    private InvocationRequest setInvocationRequest(final String detailsPath, final String commandFinal){
-        InvocationRequest request = new DefaultInvocationRequest();
-        request.setPomFile(new File(directionBasePathModel.getBasePath() + "/" + detailsPath));
-        request.setGoals(Collections.singletonList(commandFinal));
-
-        return request;
-    }
-
-    private Invoker invoker(){
-        Invoker invoker = new DefaultInvoker();
-        invoker.setMavenHome(new File(System.getenv(mavenHomeModel.getMavenHome())));
-
-        return invoker;
-    }
-
-    private InvocationResult invocationResult(final String detailsPath, final String commandFinal) throws MavenInvocationException {
-        return invoker().execute(setInvocationRequest(detailsPath, commandFinal));
-    }
-
-
-    private void mvnBuild(final String detailsPath, final String commandFinal, TextArea resultOutput) {
-        try {
-            invoker().execute(setInvocationRequest(detailsPath, commandFinal));
-
-            exitCodeStatus(resultAppendString, invocationResult(detailsPath, commandFinal), detailsPath);
-
-        } catch (MavenInvocationException e) {
-            errorMessage = e.getMessage();
-            resultAppendString
-                    .append("Project - ")
-                    .append(detailsPath)
-                    .append(errorMessage)
-                    .append("\n");
-        }
-        addInvokerResult(resultOutput);
-    }
-
-    private void exitCodeStatus(StringBuilder resultAppendString, InvocationResult result, String detailsPath){
-        switch (result.getExitCode()){
-            case 1:
-                exitCodeFail(resultAppendString, result, detailsPath);
-                break;
-            case 0:
-                exitCodeSuccess(resultAppendString, result, detailsPath);
-                break;
-        }
-    }
-
-    private void exitCodeSuccess(StringBuilder resultAppendString, InvocationResult result, String detailsPath) {
-        resultAppendString
-                .append("Project - ")
-                .append(detailsPath)
-                .append(". Build success. ")
-                .append("Exit code: ")
-                .append(result.getExitCode())
-                .append("\n");
-    }
-
-    private void exitCodeFail(StringBuilder resultAppendString, InvocationResult result, String detailsPath) {
-        if (result.getExecutionException() != null) {
-            errorMessage = result.getExecutionException().getMessage();
-            resultAppendString
-                    .append("Project - ")
-                    .append(detailsPath)
-                    .append(errorMessage)
-                    .append(". Build failed. ")
-                    .append("Exit code: ")
-                    .append(result.getExitCode())
-                    .append("\n");
-        } else {
-            resultAppendString
-                    .append("Project - ")
-                    .append(detailsPath)
-                    .append(errorMessage)
-                    .append(". Build failed. ")
-                    .append("Exit code: ")
-                    .append(result.getExitCode())
-                    .append("\n");
-        }
-    }
-
-    private void addInvokerResult(TextArea resultOutput) {
-        resultOutput.setText(resultAppendString.toString());
     }
 
     private int selectedIndex(ListView<String> list) {
