@@ -23,8 +23,8 @@
       <TextField fx:id="mavenHomePath" layoutX="422.0" layoutY="14.0" prefHeight="33.0" prefWidth="120.0" promptText="MAVEN_HOME" />
       <TextField fx:id="basePathInput" layoutX="14.0" layoutY="14.0" prefHeight="33.0" prefWidth="400.0" promptText="e.q.: D:/Workspace/intelij" />
       <TextArea fx:id="resultOutput" editable="false" layoutX="14.0" layoutY="517.0" prefHeight="65.0" prefWidth="400.0" promptText="Build result... If your MAVEN_HOME  or GRADLE_HOME path is incorrect build can't running" />
-      <ListView fx:id="projectsFromPathGradle" layoutX="14.0" layoutY="288.0" onMouseClicked="#mouseClickGradle" prefHeight="220.0" prefWidth="195.0" />
-      <ListView fx:id="projectsCandidateToGradle" layoutX="218.0" layoutY="288.0" onMouseClicked="#mouseClickRemoveGradle" prefHeight="220.0" prefWidth="195.0" />
+      <ListView fx:id="projectsFromPathGradle" layoutX="14.0" layoutY="288.0" onMouseClicked="#addGradleProjectToListCandidate" prefHeight="220.0" prefWidth="195.0" />
+      <ListView fx:id="projectsCandidateToGradle" layoutX="218.0" layoutY="288.0" onMouseClicked="#removeGradleProjectCandidate" prefHeight="220.0" prefWidth="195.0" />
       <ListView fx:id="gradleOrderCandidate" layoutX="422.0" layoutY="288.0" onMouseClicked="#gradleOrderSelectCandidate" prefHeight="220.0" prefWidth="120.0" />
       <ListView fx:id="gradleOrderReadyList" layoutX="551.0" layoutY="288.0" onMouseClicked="#gradleOrderSelectReady" prefHeight="220.0" prefWidth="120.0" />
       <TextField fx:id="gradleHomePath" layoutX="551.0" layoutY="14.0" prefHeight="33.0" prefWidth="120.0" promptText="GRADLE_HOME" />

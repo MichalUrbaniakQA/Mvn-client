@@ -1,7 +1,7 @@
 package app;
 
 import app.direction.DirectionPathService;
-import app.gradle.GradleService;
+import app.gradle.GradleServiceImpl;
 import app.util.CommonService;
 import app.util.FileRead;
 import javafx.event.ActionEvent;
@@ -13,6 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,11 +24,17 @@ public class Controller implements Initializable {
     @Autowired
     private DirectionPathService directionPathService;
     @Autowired
-    private CommonService commonService;
-    @Autowired
-    private GradleService gradleService;
-    @Autowired
     private FileRead fileRead;
+
+    @Qualifier("mavenServiceImpl")
+    @Autowired
+    private CommonService mavenService;
+    @Qualifier("gradleServiceImpl")
+    @Autowired
+    private CommonService gradleService;
+
+    @Autowired
+    private GradleServiceImpl test;
 
     @FXML
     private ListView<String> projectsFromPathMaven, projectsCandidateToMaven, mavenOrderCandidate, mavenOrderReadyList;
@@ -48,64 +55,69 @@ public class Controller implements Initializable {
 
     @FXML
     void addMavenProjectToListCandidate(MouseEvent event) {
-        commonService.candidateProjectToBuild(projectsFromPathMaven, projectsCandidateToMaven);
+        mavenService.candidateProjectToBuild(projectsFromPathMaven, projectsCandidateToMaven);
     }
 
     @FXML
-    void removeMavenProjectCandidate(MouseEvent event) {
-        commonService.finalProjectToBuild(projectsCandidateToMaven);
+    void addGradleProjectToListCandidate(MouseEvent event) {
+        gradleService.candidateProjectToBuild(projectsFromPathGradle, projectsCandidateToGradle);
     }
+    ///////////////////////////////////////////////////////////////////////
+    @FXML
+    void removeMavenProjectCandidate(MouseEvent event) {
+        mavenService.finalProjectToBuild(projectsCandidateToMaven);
+    }
+
+    @FXML
+    void removeGradleProjectCandidate(MouseEvent event) {
+        gradleService.finalProjectToBuild(projectsCandidateToGradle);
+    }
+    //////////////////////////////////////////////////////////////////////
 
     @FXML
     void mavenOrderSelectCandidate(MouseEvent event) {
-        commonService.candidateCommandToBuild(mavenOrderCandidate, mavenOrderReadyList);
-    }
-
-    @FXML
-    void mavenOrderSelectReady(MouseEvent event) {
-        commonService.finalCommandToBuild(mavenOrderCandidate, mavenOrderReadyList);
-    }
-
-    @FXML
-    void mouseClickGradle(MouseEvent event) {
-        gradleService.chooseProject(projectsFromPathGradle, projectsCandidateToGradle);
+        mavenService.candidateCommandToBuild(mavenOrderCandidate, mavenOrderReadyList);
     }
 
     @FXML
     void gradleOrderSelectCandidate(MouseEvent event) {
+        gradleService.candidateCommandToBuild(gradleOrderCandidate, gradleOrderReadyList);
+    }
+    //////////////////////////////////////////////////////////////////////////////////
+
+    @FXML
+    void mavenOrderSelectReady(MouseEvent event) {
+        mavenService.finalCommandToBuild(mavenOrderCandidate, mavenOrderReadyList);
     }
 
     @FXML
     void gradleOrderSelectReady(MouseEvent event) {
+        gradleService.finalCommandToBuild(gradleOrderCandidate, gradleOrderReadyList);
     }
-
-
-    @FXML
-    void mouseClickRemoveGradle(MouseEvent event) {
-        gradleService.removeFromGradleList(projectsCandidateToGradle);
-    }
-
+    //////////////////////////////////////////////////////////////////////////////////////
     @FXML
     void mvnBuildButton(ActionEvent event) {
-        commonService.buildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, resultOutput);
+        mavenService.buildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, resultOutput);
     }
 
     @FXML
     void gradleBuildButton(ActionEvent event) {
-
+      //  gradleService.buildButton(gradleHomePath, projectsCandidateToGradle, gradleOrderReadyList, resultOutput);
+        test.aaa();
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setValueTo();
-        commonService.addCommand(mavenOrderCandidate);
+        mavenService.addCommand(mavenOrderCandidate);
+        gradleService.addCommand(gradleOrderCandidate);
 
         basePathSaveButton.setOnAction(this::saveBasePath);
 
         projectsFromPathMaven.setOnMouseClicked(this::addMavenProjectToListCandidate);
-        projectsFromPathGradle.setOnMouseClicked(this::mouseClickGradle);
+        projectsFromPathGradle.setOnMouseClicked(this::addGradleProjectToListCandidate);
         projectsCandidateToMaven.setOnMouseClicked(this::removeMavenProjectCandidate);
-        projectsCandidateToGradle.setOnMouseClicked(this::mouseClickRemoveGradle);
+        projectsCandidateToGradle.setOnMouseClicked(this::removeGradleProjectCandidate);
         mvnBuildButton.setOnAction(this::mvnBuildButton);
         mavenOrderCandidate.setOnMouseClicked(this::mavenOrderSelectCandidate);
         mavenOrderReadyList.setOnMouseClicked(this::mavenOrderSelectReady);

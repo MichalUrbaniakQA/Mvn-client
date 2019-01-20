@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Service
+@Service(value="mavenServiceImpl")
 public class MavenServiceImpl implements CommonService {
 
     @Autowired
@@ -21,6 +21,7 @@ public class MavenServiceImpl implements CommonService {
     private ObservableList<String> candidateCommandList = FXCollections.observableArrayList();
 
     private ObservableList<String> finalProjectList = FXCollections.observableArrayList();
+    private ObservableList<String> candidateProjectList = FXCollections.observableArrayList();
 
     private StringBuilder commandMaven = new StringBuilder();
     private StringBuilder resultAppendString = new StringBuilder();
@@ -39,13 +40,6 @@ public class MavenServiceImpl implements CommonService {
     }
 
     @Override
-    public void candidateCommandToBuild(ListView<String> commandCandidate, ListView<String> commandFinal) {
-        addElementToList(finalCommandList, commandCandidate);
-        commandFinal.setItems(finalCommandList);
-        removeElement(commandCandidate, selectedIndex(commandCandidate));
-    }
-
-    @Override
     public void finalCommandToBuild(ListView<String> commandCandidate, ListView<String> commandFinal) {
         addElementToList(candidateCommandList, commandFinal);
         commandCandidate.setItems(candidateCommandList);
@@ -53,8 +47,16 @@ public class MavenServiceImpl implements CommonService {
     }
 
     @Override
+    public void candidateCommandToBuild(ListView<String> commandCandidate, ListView<String> commandFinal) {
+        addElementToList(finalCommandList, commandCandidate);
+        commandFinal.setItems(finalCommandList);
+        removeElement(commandCandidate, selectedIndex(commandCandidate));
+    }
+
+    @Override
     public void addCommand(ListView<String> commandCandidate) {
-        candidateCommandList.addAll("clean", "validate", "compile", "test", "-DskipTests", "package", "verify", "install", "site", "deploy");
+        candidateCommandList.addAll("clean", "validate", "compile", "test", "-DskipTests", "package", "verify", "install", "site",
+                "deploy", "jar");
         commandCandidate.setItems(candidateCommandList);
     }
 
@@ -81,6 +83,10 @@ public class MavenServiceImpl implements CommonService {
         }
     }
 
+    private void removeElement(ListView<String> listWithElement, int elementToRemove) {
+        listWithElement.getItems().remove(elementToRemove);
+    }
+
     private int selectedIndex(ListView<String> list) {
         return list.getSelectionModel().getSelectedIndex();
     }
@@ -92,9 +98,5 @@ public class MavenServiceImpl implements CommonService {
     private void addElementToList(ObservableList<String> storeList, ListView<String> guiList) {
         if (!(storeList.containsAll(getSelectedItems(guiList))))
             storeList.addAll(getSelectedItems(guiList));
-    }
-
-    private void removeElement(ListView<String> listWithElement, int elementToRemove) {
-        listWithElement.getItems().remove(elementToRemove);
     }
 }
