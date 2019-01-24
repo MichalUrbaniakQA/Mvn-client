@@ -1,7 +1,7 @@
 package app;
 
 import app.direction.DirectionPathService;
-import app.gradle.GradleServiceImpl;
+import app.jgit.Test;
 import app.util.CommonService;
 import app.util.FileRead;
 import javafx.event.ActionEvent;
@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -25,6 +26,8 @@ public class Controller implements Initializable {
     private DirectionPathService directionPathService;
     @Autowired
     private FileRead fileRead;
+    @Autowired
+    private Test test;
 
     @Qualifier("mavenServiceImpl")
     @Autowired
@@ -32,9 +35,6 @@ public class Controller implements Initializable {
     @Qualifier("gradleServiceImpl")
     @Autowired
     private CommonService gradleService;
-
-    @Autowired
-    private GradleServiceImpl test;
 
     @FXML
     private ListView<String> projectsFromPathMaven, projectsCandidateToMaven, mavenOrderCandidate, mavenOrderReadyList;
@@ -102,23 +102,25 @@ public class Controller implements Initializable {
 
     @FXML
     void gradleBuildButton(ActionEvent event) {
-      //  gradleService.buildButton(gradleHomePath, projectsCandidateToGradle, gradleOrderReadyList, resultOutput);
-        test.aaa();
+        gradleService.buildButton(gradleHomePath, projectsCandidateToGradle, gradleOrderReadyList, resultOutput);
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        test.pull3();
+
         setValueTo();
         mavenService.addCommand(mavenOrderCandidate);
         gradleService.addCommand(gradleOrderCandidate);
 
         basePathSaveButton.setOnAction(this::saveBasePath);
-
         projectsFromPathMaven.setOnMouseClicked(this::addMavenProjectToListCandidate);
         projectsFromPathGradle.setOnMouseClicked(this::addGradleProjectToListCandidate);
         projectsCandidateToMaven.setOnMouseClicked(this::removeMavenProjectCandidate);
         projectsCandidateToGradle.setOnMouseClicked(this::removeGradleProjectCandidate);
         mvnBuildButton.setOnAction(this::mvnBuildButton);
+        gradleBuildButton.setOnAction(this::gradleBuildButton);
         mavenOrderCandidate.setOnMouseClicked(this::mavenOrderSelectCandidate);
         mavenOrderReadyList.setOnMouseClicked(this::mavenOrderSelectReady);
     }

@@ -12,7 +12,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.0.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
 
     <repositories>
@@ -23,147 +23,85 @@
     </repositories>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.gradle/gradle-core -->
         <dependency>
             <groupId>org.gradle</groupId>
             <artifactId>gradle-core</artifactId>
             <version>4.2.1</version>
             <scope>provided</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.gradle/gradle-tooling-api -->
         <dependency>
             <groupId>org.gradle</groupId>
             <artifactId>gradle-tooling-api</artifactId>
             <version>4.2.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.gradle/gradle-base-services -->
         <dependency>
             <groupId>org.gradle</groupId>
             <artifactId>gradle-base-services</artifactId>
             <version>4.2.1</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.gradle/gradle-base-services-groovy -->
         <dependency>
             <groupId>org.gradle</groupId>
             <artifactId>gradle-base-services-groovy</artifactId>
             <version>4.1</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all -->
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>2.5.5</version>
-            <type>pom</type>
-        </dependency>
-
-
-
-
-        <!--<dependency>-->
-            <!--<groupId>org.gradle</groupId>-->
-            <!--<artifactId>gradle-tooling-api</artifactId>-->
-            <!--<version>5.2</version>-->
-        <!--</dependency>-->
-
-
-
 
 
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
-            <version>5.2.0.201812061821-r</version>
+            <version>5.2.1.201812262042-r</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit.http.server</artifactId>
+            <version>5.2.1.201812262042-r</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit.ui</artifactId>
+            <version>5.2.1.201812262042-r</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit.junit</artifactId>
+            <version>5.2.1.201812262042-r</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>org.testfx</groupId>-->
-            <!--<artifactId>testfx-core</artifactId>-->
-            <!--<version>4.0.1-alpha</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.testfx</groupId>-->
-            <!--<artifactId>testfx-junit</artifactId>-->
-            <!--<version>4.0.1-alpha</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-embedder</artifactId>
             <version>3.6.0</version>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-api</artifactId>-->
-            <!--<version>1.7.25</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-log4j12</artifactId>-->
-            <!--<version>1.7.25</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.apache.maven.wagon</groupId>-->
-            <!--<artifactId>wagon-http-lightweight</artifactId>-->
-            <!--<version>3.2.0</version>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-invoker</artifactId>
             <version>3.0.1</version>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-surefire-report-plugin</artifactId>-->
-            <!--<version>3.0.0-M3</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.apache.commons</groupId>-->
-            <!--<artifactId>commons-exec</artifactId>-->
-            <!--<version>1.3</version>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.4</version>
             <scope>provided</scope>
         </dependency>
-
-
-
     </dependencies>
     <build>
-
-
         <plugins>
             <plugin>
                 <artifactId>maven-invoker-plugin</artifactId>
@@ -186,7 +124,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -195,7 +132,6 @@
                     <target>8</target>
                 </configuration>
             </plugin>
-
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
@@ -218,9 +154,7 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
-
             <plugin>
-                <!-- Build an executable JAR -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
@@ -236,5 +170,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

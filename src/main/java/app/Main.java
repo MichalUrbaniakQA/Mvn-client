@@ -14,8 +14,6 @@ import java.io.IOException;
 @SpringBootApplication
 public class Main extends Application {
 
-    private ConfigurableApplicationContext springContext;
-    private Parent rootNode;
     private FXMLLoader fxmlLoader;
 
     public static void main(String[] args) {
@@ -24,7 +22,7 @@ public class Main extends Application {
 
     @Override
     public void init() {
-        springContext = SpringApplication.run(Main.class);
+        ConfigurableApplicationContext springContext = SpringApplication.run(Main.class);
         fxmlLoader = new FXMLLoader();
         fxmlLoader.setControllerFactory(springContext::getBean);
     }
@@ -32,7 +30,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         fxmlLoader.setLocation(getClass().getResource("/test.fxml"));
-        rootNode = fxmlLoader.load();
+        Parent rootNode = fxmlLoader.load();
 
         primaryStage.setTitle("Awesome app");
         primaryStage.setScene(new Scene(rootNode));

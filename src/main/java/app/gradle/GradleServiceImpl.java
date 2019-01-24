@@ -6,15 +6,16 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import org.gradle.tooling.BuildLauncher;
-import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ProjectConnection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.util.ArrayList;
 
 @Service(value="gradleServiceImpl")
 public class GradleServiceImpl implements CommonService {
+
+    @Autowired
+    private GradleInvokerService gradleInvokerService;
 
     private ObservableList<String> finalCommandList = FXCollections.observableArrayList();
     private ObservableList<String> candidateCommandList = FXCollections.observableArrayList();
@@ -56,30 +57,26 @@ public class GradleServiceImpl implements CommonService {
         commandCandidate.setItems(candidateCommandList);
     }
 
-    public void aaa(){
-        String g1 = "C:/Gradle/gradle-5.1";
-        String g2 = "GRADLE_HOME";
-        String g3 = "clean build";
-        String g4 = "D:/Workspace/intelij/springboot-auth-updated";
-
-        ProjectConnection connection = GradleConnector.newConnector()
-                .forProjectDirectory(new File(g4))
-                .connect();
-        try {
-            BuildLauncher build = connection.newBuild();
-            build.forTasks(g3);
-            build.setStandardOutput(System.out);
-            build.run();
-        } finally {
-            connection.close();
-        }
-
-    }
-
     @Override
     public void buildButton(TextField homePath, ListView<String> projectsCandidate, ListView<String> commandFinal, TextArea resultOutput) {
+        executeGradleCommand(projectsCandidate, commandFinal);
+    }
 
+    private void executeGradleCommand(ListView<String> projectsCandidate, ListView<String> commandFinal) {
+        ArrayList<String> completeListOfCandidate = new ArrayList<>(projectsCandidate.getItems());
 
+        for (String iterator : completeListOfCandidate) {
+            appendGradleCommand(commandFinal);
+            gradleInvokerService.gradleBuild(resultAppendString, iterator, commandGradle.toString());
+        }
+    }
+
+    private void appendGradleCommand(ListView<String> commandFinal) {
+        ArrayList<String> completeListOfMavenCommand = new ArrayList<>(commandFinal.getItems());
+
+        for (String s : completeListOfMavenCommand) {
+            commandGradle.append(s);
+        }
     }
 
     private void removeElement(ListView<String> listWithElement, int elementToRemove) {
