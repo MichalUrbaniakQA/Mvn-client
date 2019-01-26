@@ -1,7 +1,7 @@
 package app;
 
 import app.direction.DirectionPathService;
-import app.jgit.Test;
+import app.jgit.GitServiceImpl;
 import app.util.CommonService;
 import app.util.FileRead;
 import javafx.event.ActionEvent;
@@ -15,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -27,7 +26,7 @@ public class Controller implements Initializable {
     @Autowired
     private FileRead fileRead;
     @Autowired
-    private Test test;
+    private GitServiceImpl gitServiceImpl;
 
     @Qualifier("mavenServiceImpl")
     @Autowired
@@ -41,14 +40,37 @@ public class Controller implements Initializable {
     @FXML
     private ListView<String> projectsFromPathGradle, projectsCandidateToGradle, gradleOrderCandidate, gradleOrderReadyList;
     @FXML
+    private ListView<String> listOfRemoteBranches, listOfLocalBranches;
+    @FXML
     private TextField basePathInput, mavenHomePath, gradleHomePath;
     @FXML
-    private Button basePathSaveButton, mvnBuildButton, gradleBuildButton;
+    private Button basePathSaveButton, mvnBuildButton, gradleBuildButton, gitBuildButton;
     @FXML
     private TextArea resultOutput;
 
     @FXML
+    void gitBuildButton(ActionEvent event) {
+        gitServiceImpl.setBranchesOnGui(listOfRemoteBranches, listOfLocalBranches);
+    }
+
+    @FXML
+    void selectPullFrom(MouseEvent event) {
+       // gitServiceImpl.selectItem(listOfRemoteBranches);
+      //  System.out.println(gitServiceImpl.selectItem(listOfRemoteBranches));
+//        listOfRemoteBranches.getSelectionModel().getSelectedItems();
+//        System.out.println(listOfRemoteBranches.getSelectionModel().getSelectedItems().toString().replace("[","")
+//        .replace("]", ""));
+    }
+
+    @FXML
+    void selectPullTo(MouseEvent event) {
+      //  gitServiceImpl.selectItem(listOfLocalBranches);
+      //  System.out.println(gitServiceImpl.selectItem(listOfLocalBranches));
+    }
+
+    @FXML
     void saveBasePath(ActionEvent event) {
+//        gitServiceImpl.pull3(listOfRemoteBranches, listOfLocalBranches);
         directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "pom.xml");
         directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "build.gradle");
     }
@@ -108,21 +130,21 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        test.pull3();
+      //  gitServiceImpl.pull3();
 
         setValueTo();
         mavenService.addCommand(mavenOrderCandidate);
         gradleService.addCommand(gradleOrderCandidate);
 
-        basePathSaveButton.setOnAction(this::saveBasePath);
-        projectsFromPathMaven.setOnMouseClicked(this::addMavenProjectToListCandidate);
-        projectsFromPathGradle.setOnMouseClicked(this::addGradleProjectToListCandidate);
-        projectsCandidateToMaven.setOnMouseClicked(this::removeMavenProjectCandidate);
-        projectsCandidateToGradle.setOnMouseClicked(this::removeGradleProjectCandidate);
-        mvnBuildButton.setOnAction(this::mvnBuildButton);
-        gradleBuildButton.setOnAction(this::gradleBuildButton);
-        mavenOrderCandidate.setOnMouseClicked(this::mavenOrderSelectCandidate);
-        mavenOrderReadyList.setOnMouseClicked(this::mavenOrderSelectReady);
+//        basePathSaveButton.setOnAction(this::saveBasePath);
+//        projectsFromPathMaven.setOnMouseClicked(this::addMavenProjectToListCandidate);
+//        projectsFromPathGradle.setOnMouseClicked(this::addGradleProjectToListCandidate);
+//        projectsCandidateToMaven.setOnMouseClicked(this::removeMavenProjectCandidate);
+//        projectsCandidateToGradle.setOnMouseClicked(this::removeGradleProjectCandidate);
+//        mvnBuildButton.setOnAction(this::mvnBuildButton);
+//        gradleBuildButton.setOnAction(this::gradleBuildButton);
+//        mavenOrderCandidate.setOnMouseClicked(this::mavenOrderSelectCandidate);
+//        mavenOrderReadyList.setOnMouseClicked(this::mavenOrderSelectReady);
     }
 
     private void setValueTo() {

@@ -15,11 +15,15 @@ public class FileRead {
     public static String MAVEN_PATH = "";
     public static String GRADLE_PATH = "";
     public static String PROJECTS_PATH = "";
+    public static String EMAIL= "";
+    public static String PASS = "";
 
     private void setValueToPojoFromConfigFile() {
         MAVEN_PATH = records.get(0);
         GRADLE_PATH = records.get(1);
         PROJECTS_PATH = records.get(2);
+        EMAIL = records.get(3);
+        PASS = records.get(4);
     }
 
     public void setConfigFromFile(String filename) {

@@ -9,25 +9,28 @@
 
 <!--xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" />-->
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1013.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller">
    <children>
   <AnchorPane layoutX="78.0" layoutY="69.0" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
          <children>
-            <ListView fx:id="projectsFromPathMaven" layoutX="-64.0" layoutY="-12.0" onMouseClicked="#addMavenProjectToListCandidate" prefHeight="220.0" prefWidth="195.0" />
+            <ListView fx:id="projectsFromPathMaven" layoutX="-64.0" layoutY="-11.0" onMouseClicked="#addMavenProjectToListCandidate" prefHeight="220.0" prefWidth="185.0" />
          </children></AnchorPane>
-      <ListView fx:id="mavenOrderCandidate" layoutX="422.0" layoutY="58.0" onMouseClicked="#mavenOrderSelectCandidate" prefHeight="220.0" prefWidth="120.0" />
-      <ListView fx:id="projectsCandidateToMaven" layoutX="218.0" layoutY="57.0" onMouseClicked="#removeMavenProjectCandidate" prefHeight="220.0" prefWidth="195.0" />
-      <Button fx:id="mvnBuildButton" layoutX="683.0" layoutY="57.0" mnemonicParsing="false" onAction="#mvnBuildButton" prefHeight="33.0" prefWidth="74.0" text="mvn build" />
-      <Button fx:id="basePathSaveButton" layoutX="682.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveBasePath" prefHeight="33.0" prefWidth="74.0" text="submit" />
-      <ListView fx:id="mavenOrderReadyList" layoutX="551.0" layoutY="59.0" onMouseClicked="#mavenOrderSelectReady" prefHeight="220.0" prefWidth="120.0" />
-      <TextField fx:id="mavenHomePath" layoutX="422.0" layoutY="14.0" prefHeight="33.0" prefWidth="120.0" promptText="MAVEN_HOME" />
-      <TextField fx:id="basePathInput" layoutX="14.0" layoutY="14.0" prefHeight="33.0" prefWidth="400.0" promptText="e.q.: D:/Workspace/intelij" />
-      <TextArea fx:id="resultOutput" editable="false" layoutX="14.0" layoutY="517.0" prefHeight="65.0" prefWidth="400.0" promptText="Build result... If your MAVEN_HOME  or GRADLE_HOME path is incorrect build can't running" />
-      <ListView fx:id="projectsFromPathGradle" layoutX="14.0" layoutY="288.0" onMouseClicked="#addGradleProjectToListCandidate" prefHeight="220.0" prefWidth="195.0" />
-      <ListView fx:id="projectsCandidateToGradle" layoutX="218.0" layoutY="288.0" onMouseClicked="#removeGradleProjectCandidate" prefHeight="220.0" prefWidth="195.0" />
-      <ListView fx:id="gradleOrderCandidate" layoutX="422.0" layoutY="288.0" onMouseClicked="#gradleOrderSelectCandidate" prefHeight="220.0" prefWidth="120.0" />
-      <ListView fx:id="gradleOrderReadyList" layoutX="551.0" layoutY="288.0" onMouseClicked="#gradleOrderSelectReady" prefHeight="220.0" prefWidth="120.0" />
-      <TextField fx:id="gradleHomePath" layoutX="551.0" layoutY="14.0" prefHeight="33.0" prefWidth="120.0" promptText="GRADLE_HOME" />
-      <Button fx:id="gradleBuildButton" layoutX="683.0" layoutY="100.0" mnemonicParsing="false" onAction="#gradleBuildButton" prefHeight="33.0" prefWidth="74.0" text="grd build" />
+      <ListView fx:id="mavenOrderCandidate" layoutX="600.0" layoutY="58.0" onMouseClicked="#mavenOrderSelectCandidate" prefHeight="220.0" prefWidth="120.0" />
+      <ListView fx:id="projectsCandidateToMaven" layoutX="210.0" layoutY="58.0" onMouseClicked="#removeMavenProjectCandidate" prefHeight="220.0" prefWidth="185.0" />
+      <Button fx:id="mvnBuildButton" layoutX="861.0" layoutY="57.0" mnemonicParsing="false" onAction="#mvnBuildButton" prefHeight="33.0" prefWidth="74.0" text="maven" />
+      <Button fx:id="basePathSaveButton" layoutX="860.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveBasePath" prefHeight="33.0" prefWidth="74.0" text="submit" />
+      <ListView fx:id="mavenOrderReadyList" layoutX="729.0" layoutY="59.0" onMouseClicked="#mavenOrderSelectReady" prefHeight="220.0" prefWidth="120.0" />
+      <TextField fx:id="mavenHomePath" layoutX="600.0" layoutY="14.0" prefHeight="33.0" prefWidth="120.0" promptText="MAVEN_HOME" />
+      <TextField fx:id="basePathInput" layoutX="14.0" layoutY="14.0" prefHeight="33.0" prefWidth="380.0" promptText="e.q.: D:/Workspace/intelij" />
+      <TextArea fx:id="resultOutput" editable="false" layoutX="14.0" layoutY="518.0" prefHeight="121.0" prefWidth="380.0" promptText="Build result... If your MAVEN_HOME  or GRADLE_HOME path is incorrect build can't running" />
+      <ListView fx:id="projectsFromPathGradle" layoutX="14.0" layoutY="288.0" onMouseClicked="#addGradleProjectToListCandidate" prefHeight="220.0" prefWidth="185.0" />
+      <ListView fx:id="projectsCandidateToGradle" layoutX="210.0" layoutY="288.0" onMouseClicked="#removeGradleProjectCandidate" prefHeight="220.0" prefWidth="185.0" />
+      <ListView fx:id="gradleOrderCandidate" layoutX="600.0" layoutY="288.0" onMouseClicked="#gradleOrderSelectCandidate" prefHeight="220.0" prefWidth="120.0" />
+      <ListView fx:id="gradleOrderReadyList" layoutX="729.0" layoutY="288.0" onMouseClicked="#gradleOrderSelectReady" prefHeight="220.0" prefWidth="120.0" />
+      <TextField fx:id="gradleHomePath" layoutX="729.0" layoutY="14.0" prefHeight="33.0" prefWidth="120.0" promptText="GRADLE_HOME" />
+      <Button fx:id="gradleBuildButton" layoutX="861.0" layoutY="100.0" mnemonicParsing="false" onAction="#gradleBuildButton" prefHeight="33.0" prefWidth="74.0" text="gradle" />
+      <ListView fx:id="listOfRemoteBranches" layoutX="405.0" layoutY="58.0" onMouseClicked="#selectPullFrom" prefHeight="220.0" prefWidth="185.0" />
+      <ListView fx:id="listOfLocalBranches" layoutX="405.0" layoutY="288.0" onMouseClicked="#selectPullTo" prefHeight="220.0" prefWidth="185.0" />
+      <Button fx:id="gitRunButton" layoutX="861.0" layoutY="145.0" mnemonicParsing="false" onAction="#gitBuildButton" prefHeight="33.0" prefWidth="74.0" text="git" />
    </children>
 </Pane>
