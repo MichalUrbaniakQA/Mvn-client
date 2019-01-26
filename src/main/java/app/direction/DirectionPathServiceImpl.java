@@ -4,6 +4,7 @@ import app.util.FileRead;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class DirectionPathServiceImpl implements DirectionPathService {
 
     @Override
     public void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPathMaven,
-                                      ListView<String> projectsFromPathGradle, final String value) {
+                                      ListView<String> projectsFromPathGradle, final String value, TextArea resultOutput) {
 
         FileRead.PROJECTS_PATH = basePathInput.getText();
 
@@ -39,12 +40,16 @@ public class DirectionPathServiceImpl implements DirectionPathService {
                     .collect(Collectors.toList());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            resultOutput.setText(e.getMessage());
         }
 
         Path[] stockArr = new Path[subfolder.size()];
         stockArr = subfolder.toArray(stockArr);
 
+        setProjects(value, stockArr, projectsFromPathMaven, projectsFromPathGradle);
+    }
+
+    private void setProjects(final String value, Path[] stockArr, ListView<String> projectsFromPathMaven, ListView<String> projectsFromPathGradle){
         switch (value) {
             case "pom.xml":
                 for (Path s : stockArr) {

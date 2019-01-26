@@ -14,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -57,8 +56,8 @@ public class Controller implements Initializable {
 
     @FXML
     void saveBasePath(ActionEvent event) {
-        directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "pom.xml");
-        directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "build.gradle");
+        directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "pom.xml", resultOutput);
+        directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "build.gradle", resultOutput);
     }
 
     @FXML
@@ -118,6 +117,7 @@ public class Controller implements Initializable {
         mavenService.addCommand(mavenOrderCandidate);
         gradleService.addCommand(gradleOrderCandidate);
 
+//        I need comments below so hold your horses nazi reviewer
 //        basePathSaveButton.setOnAction(this::saveBasePath);
 //        projectsFromPathMaven.setOnMouseClicked(this::addMavenProjectToListCandidate);
 //        projectsFromPathGradle.setOnMouseClicked(this::addGradleProjectToListCandidate);

@@ -22,54 +22,57 @@
         </repository>
     </repositories>
 
+    <properties>
+        <org.gradle.version>4.2.1</org.gradle.version>
+        <org.eclipse.jgit.version>5.2.1.201812262042-r</org.eclipse.jgit.version>
+        <maven-embedder.version>3.6.0</maven-embedder.version>
+        <maven-invoker.version>3.0.1</maven-invoker.version>
+        <lombok.version>1.18.4</lombok.version>
+    </properties>
+
     <dependencies>
+        <!-- GRADLE -->
         <dependency>
             <groupId>org.gradle</groupId>
             <artifactId>gradle-core</artifactId>
-            <version>4.2.1</version>
+            <version>${org.gradle.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.gradle</groupId>
             <artifactId>gradle-tooling-api</artifactId>
-            <version>4.2.1</version>
+            <version>${org.gradle.version}</version>
         </dependency>
         <dependency>
             <groupId>org.gradle</groupId>
             <artifactId>gradle-base-services</artifactId>
-            <version>4.2.1</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.gradle</groupId>
-            <artifactId>gradle-base-services-groovy</artifactId>
-            <version>4.1</version>
+            <version>${org.gradle.version}</version>
             <scope>runtime</scope>
         </dependency>
 
-
+        <!-- ECLIPSE -->
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
-            <version>5.2.1.201812262042-r</version>
+            <version>${org.eclipse.jgit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit.http.server</artifactId>
-            <version>5.2.1.201812262042-r</version>
+            <version>${org.eclipse.jgit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit.ui</artifactId>
-            <version>5.2.1.201812262042-r</version>
+            <version>${org.eclipse.jgit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit.junit</artifactId>
-            <version>5.2.1.201812262042-r</version>
+            <version>${org.eclipse.jgit.version}</version>
         </dependency>
 
-
+        <!-- SPRING -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -81,23 +84,27 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <!-- APACHE -->
+        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-embedder</artifactId>
-            <version>3.6.0</version>
+            <version>${maven-embedder.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-invoker</artifactId>
-            <version>3.0.1</version>
+            <version>${maven-invoker.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
+
+        <!-- LOMBOK -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -105,7 +112,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-invoker-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>${maven-invoker.version}</version>
                 <configuration>
                     <projectsDirectory>src/it</projectsDirectory>
                     <localRepositoryPath>target/local-repo</localRepositoryPath>
@@ -157,7 +164,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>${maven-invoker.version}</version>
                 <configuration>
                     <archive>
                         <manifest>
