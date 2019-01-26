@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,6 +32,7 @@ public class Controller implements Initializable {
     @Qualifier("mavenServiceImpl")
     @Autowired
     private CommonService mavenService;
+
     @Qualifier("gradleServiceImpl")
     @Autowired
     private CommonService gradleService;
@@ -40,9 +42,9 @@ public class Controller implements Initializable {
     @FXML
     private ListView<String> projectsFromPathGradle, projectsCandidateToGradle, gradleOrderCandidate, gradleOrderReadyList;
     @FXML
-    private ListView<String> listOfRemoteBranches, listOfLocalBranches;
+    private ListView<String> listOfBranches;
     @FXML
-    private TextField basePathInput, mavenHomePath, gradleHomePath;
+    private TextField basePathInput, mavenHomePath, gradleHomePath, branchName;
     @FXML
     private Button basePathSaveButton, mvnBuildButton, gradleBuildButton, gitBuildButton;
     @FXML
@@ -50,27 +52,11 @@ public class Controller implements Initializable {
 
     @FXML
     void gitBuildButton(ActionEvent event) {
-        gitServiceImpl.setBranchesOnGui(listOfRemoteBranches, listOfLocalBranches);
-    }
-
-    @FXML
-    void selectPullFrom(MouseEvent event) {
-       // gitServiceImpl.selectItem(listOfRemoteBranches);
-      //  System.out.println(gitServiceImpl.selectItem(listOfRemoteBranches));
-//        listOfRemoteBranches.getSelectionModel().getSelectedItems();
-//        System.out.println(listOfRemoteBranches.getSelectionModel().getSelectedItems().toString().replace("[","")
-//        .replace("]", ""));
-    }
-
-    @FXML
-    void selectPullTo(MouseEvent event) {
-      //  gitServiceImpl.selectItem(listOfLocalBranches);
-      //  System.out.println(gitServiceImpl.selectItem(listOfLocalBranches));
+        gitServiceImpl.gitBuild(branchName, listOfBranches, resultOutput);
     }
 
     @FXML
     void saveBasePath(ActionEvent event) {
-//        gitServiceImpl.pull3(listOfRemoteBranches, listOfLocalBranches);
         directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "pom.xml");
         directionPathService.saveDirectionBasePath(basePathInput, projectsFromPathMaven, projectsFromPathGradle, "build.gradle");
     }
@@ -78,23 +64,23 @@ public class Controller implements Initializable {
     @FXML
     void addMavenProjectToListCandidate(MouseEvent event) {
         mavenService.candidateProjectToBuild(projectsFromPathMaven, projectsCandidateToMaven);
+        gitServiceImpl.getLocalBranches(listOfBranches, projectsCandidateToMaven, resultOutput);
     }
 
     @FXML
     void addGradleProjectToListCandidate(MouseEvent event) {
         gradleService.candidateProjectToBuild(projectsFromPathGradle, projectsCandidateToGradle);
     }
-    ///////////////////////////////////////////////////////////////////////
+
     @FXML
     void removeMavenProjectCandidate(MouseEvent event) {
-        mavenService.finalProjectToBuild(projectsCandidateToMaven);
+        mavenService.finalProjectToBuild(projectsCandidateToMaven, listOfBranches);
     }
 
     @FXML
     void removeGradleProjectCandidate(MouseEvent event) {
-        gradleService.finalProjectToBuild(projectsCandidateToGradle);
+        gradleService.finalProjectToBuild(projectsCandidateToGradle, listOfBranches);
     }
-    //////////////////////////////////////////////////////////////////////
 
     @FXML
     void mavenOrderSelectCandidate(MouseEvent event) {
@@ -105,7 +91,6 @@ public class Controller implements Initializable {
     void gradleOrderSelectCandidate(MouseEvent event) {
         gradleService.candidateCommandToBuild(gradleOrderCandidate, gradleOrderReadyList);
     }
-    //////////////////////////////////////////////////////////////////////////////////
 
     @FXML
     void mavenOrderSelectReady(MouseEvent event) {
@@ -116,7 +101,7 @@ public class Controller implements Initializable {
     void gradleOrderSelectReady(MouseEvent event) {
         gradleService.finalCommandToBuild(gradleOrderCandidate, gradleOrderReadyList);
     }
-    //////////////////////////////////////////////////////////////////////////////////////
+
     @FXML
     void mvnBuildButton(ActionEvent event) {
         mavenService.buildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, resultOutput);
@@ -126,12 +111,9 @@ public class Controller implements Initializable {
     void gradleBuildButton(ActionEvent event) {
         gradleService.buildButton(gradleHomePath, projectsCandidateToGradle, gradleOrderReadyList, resultOutput);
     }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-      //  gitServiceImpl.pull3();
-
         setValueTo();
         mavenService.addCommand(mavenOrderCandidate);
         gradleService.addCommand(gradleOrderCandidate);
@@ -152,5 +134,6 @@ public class Controller implements Initializable {
         basePathInput.setText(FileRead.PROJECTS_PATH);
         mavenHomePath.setText(FileRead.MAVEN_PATH);
         gradleHomePath.setText(FileRead.GRADLE_PATH);
+        branchName.setText(FileRead.BRANCH_NAME);
     }
 }

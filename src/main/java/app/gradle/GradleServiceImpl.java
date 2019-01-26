@@ -26,8 +26,9 @@ public class GradleServiceImpl implements CommonService {
     private StringBuilder resultAppendString = new StringBuilder();
 
     @Override
-    public void finalProjectToBuild(ListView<String> projectsFinal) {
+    public void finalProjectToBuild(ListView<String> projectsFinal, ListView<String> listOfBranches) {
         removeElement(projectsFinal, selectedIndex(projectsFinal));
+        listOfBranches.getItems().clear();
     }
 
     @Override

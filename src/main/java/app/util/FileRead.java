@@ -17,6 +17,7 @@ public class FileRead {
     public static String PROJECTS_PATH = "";
     public static String EMAIL= "";
     public static String PASS = "";
+    public static String BRANCH_NAME = "";
 
     private void setValueToPojoFromConfigFile() {
         MAVEN_PATH = records.get(0);
@@ -24,6 +25,7 @@ public class FileRead {
         PROJECTS_PATH = records.get(2);
         EMAIL = records.get(3);
         PASS = records.get(4);
+        BRANCH_NAME = records.get(5);
     }
 
     public void setConfigFromFile(String filename) {

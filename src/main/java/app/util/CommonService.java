@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 
 public interface CommonService {
 
-    void finalProjectToBuild(ListView<String> projectsFinal);
+    void finalProjectToBuild(ListView<String> projectsFinal, ListView<String> listOfBranches);
     void candidateProjectToBuild(ListView<String> projectsCandidate, ListView<String> projectsFinal);
 
     void finalCommandToBuild(ListView<String> commandCandidate, ListView<String> commandFinal);

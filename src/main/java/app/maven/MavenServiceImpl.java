@@ -29,14 +29,16 @@ public class MavenServiceImpl implements CommonService {
     private String errorMessage;
 
     @Override
-    public void finalProjectToBuild(ListView<String> projectsFinal) {
+    public void finalProjectToBuild(ListView<String> projectsFinal, ListView<String> listOfBranches) {
         removeElement(projectsFinal, selectedIndex(projectsFinal));
+        listOfBranches.getItems().clear();
     }
 
     @Override
     public void candidateProjectToBuild(ListView<String> projectsCandidate, ListView<String> projectsFinal) {
         addElementToList(finalProjectList, projectsCandidate);
         projectsFinal.setItems(finalProjectList);
+
     }
 
     @Override

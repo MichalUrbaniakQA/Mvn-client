@@ -4,8 +4,9 @@ import app.util.FileRead;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
@@ -19,97 +20,78 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class GitServiceImpl {
+public class GitServiceImpl implements GitService {
 
-    private ObservableList<String> remoteBranches = FXCollections.observableArrayList();
     private ObservableList<String> localBranches = FXCollections.observableArrayList();
 
     private Git git;
     private Repository localRepo;
+    private CredentialsProvider cp;
 
-    String test = "D:/Workspace/intelij/gitTest";
-//    String ssh =  "git@bitbucket.org:ahmedprokebab/gittest.git";
-//    String http =  "https://ahmedprokebab@bitbucket.org/ahmedprokebab/gittest.git";
-//    String path = "D:/Workspace/test/test";
-
-    private List<Ref> remote = null;
     private List<Ref> local = null;
 
-    private ObservableList<String> getSelectedItems(ListView<String> list) {
-        return list.getSelectionModel().getSelectedItems();
-    }
-
-    private String selectItem(ListView<String> branches){
-        return branches.getSelectionModel().getSelectedItems().toString().replace("[","").replace("]", "");
-    }
-
-    public void setBranchesOnGui(ListView<String> listOfRemoteBranches, ListView<String> listOfLocalBranches ){
-        try {
-            localRepo = new FileRepository(test + "/.git");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        git = new Git(localRepo);
-
-
-        getAllRemoteBranches(listOfRemoteBranches, listOfLocalBranches);
-    }
-
-    public void pull3(ListView<String> listOfRemoteBranches, ListView<String> listOfLocalBranches) {
-        CredentialsProvider cp = new UsernamePasswordCredentialsProvider(FileRead.EMAIL, FileRead.PASS);
-
-
-        System.out.println(listOfLocalBranches.getSelectionModel().getSelectedItems());
+    private void setConfig(ListView<String> project, TextArea resultOutput) {
+        this.cp = new UsernamePasswordCredentialsProvider(FileRead.EMAIL, FileRead.PASS);
 
         try {
-            localRepo = new FileRepository(test + "/.git");
+            this.localRepo = new FileRepository(FileRead.PROJECTS_PATH + "/" + setProject(project) + "/.git");
         } catch (IOException e) {
-            e.printStackTrace();
+            resultOutput.setText(e.getMessage());
         }
-        git = new Git(localRepo);
+        this.git = new Git(localRepo);
+    }
 
-//        getAllRemoteBranches(listOfRemoteBranches, listOfLocalBranches);
+    @Override
+    public void gitBuild(final TextField branchName, ListView<String> listOfBranch, TextArea resultOutput) {
+        gitCheckout(listOfBranch, resultOutput);
+        gitPull(branchName, resultOutput);
+    }
 
-//        try {
-//            git.checkout().setName("master").call();
-//        } catch (GitAPIException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-        PullCommand cmd = git.pull().setRemoteBranchName(selectItem(listOfRemoteBranches)).setCredentialsProvider(cp);
+    @Override
+    public void getLocalBranches(ListView<String> listOfBranch, ListView<String> project, TextArea resultOutput) {
+        setConfig(project, resultOutput);
+        returnBranchList(resultOutput);
+        setBranchesShortNames();
+        listOfBranch.setItems(localBranches);
+    }
 
+    private void gitCheckout(ListView<String> listOfBranch, TextArea resultOutput){
+        try {
+            git.checkout().setName(listOfBranch.getSelectionModel().getSelectedItem().replace("[", "").replace("]", "")).call();
+        } catch (GitAPIException e) {
+            resultOutput.setText(e.getMessage());
+        }
+    }
 
+    private void gitPull(final TextField branchName, TextArea resultOutput){
+        PullCommand cmd = git.pull().setRemoteBranchName(branchName.getText()).setCredentialsProvider(cp);
         try {
             cmd.call();
-   //         git.checkout().setName("feature/test1").call();
+            resultOutput.setText("Git command successful.");
         } catch (GitAPIException e) {
-            e.printStackTrace();
+            resultOutput.setText(e.getMessage());
         }
     }
 
-    private void returnBranchList() {
+    private void returnBranchList(TextArea resultOutput) {
         try {
-            remote = git.branchList().setListMode(ListBranchCommand.ListMode.REMOTE).call();
             local = git.branchList().call();
         } catch (GitAPIException e) {
-            e.printStackTrace();
+            resultOutput.setText(e.getMessage());
         }
-    }
-
-    private void getAllRemoteBranches(ListView<String> listOfRemoteBranches, ListView<String> listOfLocalBranches) {
-        returnBranchList();
-        setBranchesShortNames();
-        listOfRemoteBranches.setItems(remoteBranches);
-        listOfLocalBranches.setItems(localBranches);
     }
 
     private void setBranchesShortNames() {
-        for (Ref ref : remote) {
-            remoteBranches.add(ref.getName().substring(ref.getName().lastIndexOf("/") + 1));
-        }
+        StringBuilder names;
         for (Ref ref : local) {
-            localBranches.add(ref.getName().substring(ref.getName().lastIndexOf("/") + 1));
+            names = new StringBuilder(ref.getName());
+            names.delete(0, 11);
+            localBranches.add(names.toString());
         }
+        localBranches.add("---------------------------");
+    }
+
+    private String setProject(ListView<String> project) {
+        return project.getItems().toString().replace("[", "").replace("]", "");
     }
 }
