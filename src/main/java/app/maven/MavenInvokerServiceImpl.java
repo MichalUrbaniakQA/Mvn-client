@@ -1,6 +1,6 @@
 package app.maven;
 
-import app.util.FileRead;
+import app.util.MvnIncorrectPathException;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.apache.maven.shared.invoker.*;
@@ -10,17 +10,17 @@ import java.io.File;
 import java.util.Collections;
 
 @Service
-class MavenInvokerServiceImpl implements MavenInvokerService {
+class MavenInvokerServiceImpl  implements MavenInvokerService {
 
     @Override
     public void mvnBuild(final StringBuilder resultAppendString, final String detailsPath, final String commandFinal,
                          final TextArea resultOutput, String errorMessage, final TextField basePathInput, final TextField mavenHomePath) {
         try {
-            invoker(mavenHomePath).execute(setInvocationRequest(detailsPath, commandFinal, basePathInput));
+            invoker(mavenHomePath, resultOutput).execute(setInvocationRequest(detailsPath, commandFinal, basePathInput));
 
-            exitCodeStatus(resultAppendString, invocationResult(detailsPath, commandFinal, basePathInput, mavenHomePath), detailsPath, errorMessage);
+            exitCodeStatus(resultAppendString, invocationResult(detailsPath, commandFinal, basePathInput, mavenHomePath, resultOutput), detailsPath, errorMessage);
 
-        } catch (MavenInvocationException e) {
+        } catch (MavenInvocationException | MvnIncorrectPathException e) {
             errorMessage = e.getMessage();
             resultAppendString
                     .append("Project - ")
@@ -39,16 +39,23 @@ class MavenInvokerServiceImpl implements MavenInvokerService {
         return request;
     }
 
-    private Invoker invoker(final TextField mavenHomePath){
+    private Invoker invoker(final TextField mavenHomePath, final TextArea resultOutput)  {
         Invoker invoker = new DefaultInvoker();
-        invoker.setMavenHome(new File(System.getenv(mavenHomePath.getText())));
+        try {
+            invoker.setMavenHome(new File(System.getenv(mavenHomePath.getText())));
+        } catch (Exception e) {
+            e.getStackTrace();
+            resultOutput.setText(new MvnIncorrectPathException("Incorrect maven path.").toString());
+        }
+
 
         return invoker;
     }
 
-    private InvocationResult invocationResult(final String detailsPath, final String commandFinal,
-                                              final TextField basePathInput, final TextField mavenHomePath) throws MavenInvocationException {
-        return invoker(mavenHomePath).execute(setInvocationRequest(detailsPath, commandFinal, basePathInput));
+    private InvocationResult invocationResult(final String detailsPath, final String commandFinal, final TextField basePathInput,
+                                              final TextField mavenHomePath, final TextArea resultOutput) throws MavenInvocationException, MvnIncorrectPathException {
+
+        return invoker(mavenHomePath, resultOutput).execute(setInvocationRequest(detailsPath, commandFinal, basePathInput));
     }
 
     private void exitCodeStatus(final StringBuilder resultAppendString, final InvocationResult result, final String detailsPath, final String errorMessage){
