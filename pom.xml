@@ -27,7 +27,7 @@
         <org.gradle.version>4.2.1</org.gradle.version>
         <org.eclipse.jgit.version>5.2.1.201812262042-r</org.eclipse.jgit.version>
         <maven-embedder.version>3.6.0</maven-embedder.version>
-        <maven-invoker.version>3.0.1</maven-invoker.version>
+        <maven.version>3.0.1</maven.version>
         <lombok.version>1.18.4</lombok.version>
     </properties>
 
@@ -98,7 +98,7 @@
         <dependency>
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-invoker</artifactId>
-            <version>${maven-invoker.version}</version>
+            <version>${maven.version}</version>
         </dependency>
 
         <!-- LOMBOK -->
@@ -111,10 +111,6 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -132,7 +128,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-invoker-plugin</artifactId>
-                <version>${maven-invoker.version}</version>
+                <version>${maven.version}</version>
                 <configuration>
                     <projectsDirectory>src/it</projectsDirectory>
                     <localRepositoryPath>target/local-repo</localRepositoryPath>
@@ -150,6 +146,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <meminitial>512m</meminitial>
+                    <maxmem>1048m</maxmem>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -195,7 +201,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-invoker.version}</version>
+                <version>${maven.version}</version>
                 <configuration>
                     <archive>
                         <manifest>
