@@ -117,7 +117,7 @@ public class Controller implements Initializable {
         mavenService.addCommand(mavenOrderCandidate);
         gradleService.addCommand(gradleOrderCandidate);
 
-//        I need comments below so hold your horses nazi reviewer
+//        I need code from comments below so hold your horses nazi reviewer
 //        basePathSaveButton.setOnAction(this::saveBasePath);
 //        projectsFromPathMaven.setOnMouseClicked(this::addMavenProjectToListCandidate);
 //        projectsFromPathGradle.setOnMouseClicked(this::addGradleProjectToListCandidate);

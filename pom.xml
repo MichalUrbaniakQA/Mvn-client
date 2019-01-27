@@ -16,8 +16,6 @@
         <relativePath/>
     </parent>
 
-
-
     <repositories>
         <repository>
             <id>repo.gradle.org</id>
