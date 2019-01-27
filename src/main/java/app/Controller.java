@@ -1,7 +1,7 @@
 package app;
 
 import app.direction.DirectionPathService;
-import app.jgit.GitServiceImpl;
+import app.jgit.GitService;
 import app.util.CommonService;
 import app.util.FileRead;
 import javafx.event.ActionEvent;
@@ -26,7 +26,7 @@ public class Controller implements Initializable {
     @Autowired
     private FileRead fileRead;
     @Autowired
-    private GitServiceImpl gitServiceImpl;
+    private GitService gitService;
 
     @Qualifier("mavenServiceImpl")
     @Autowired
@@ -51,7 +51,7 @@ public class Controller implements Initializable {
 
     @FXML
     void gitBuildButton(ActionEvent event) {
-        gitServiceImpl.gitBuild(branchName, listOfBranches, resultOutput);
+        gitService.gitBuild(branchName, listOfBranches, resultOutput);
     }
 
     @FXML
@@ -63,7 +63,7 @@ public class Controller implements Initializable {
     @FXML
     void addMavenProjectToListCandidate(MouseEvent event) {
         mavenService.candidateProjectToBuild(projectsFromPathMaven, projectsCandidateToMaven);
-        gitServiceImpl.getLocalBranches(listOfBranches, projectsCandidateToMaven, resultOutput);
+        gitService.getLocalBranches(listOfBranches, projectsCandidateToMaven, resultOutput);
     }
 
     @FXML
