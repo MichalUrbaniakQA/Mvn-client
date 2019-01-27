@@ -28,17 +28,17 @@ public class FileRead {
         BRANCH_NAME = records.get(5);
     }
 
-    public void setConfigFromFile(String filename) {
+    public void setConfigFromFile(final String filename) {
         readFile(filename);
     }
 
-    private String removeUnnesseseryPartFromLine(String removeFromTo) {
+    private String removeUnnesseseryPartFromLine(final String removeFromTo) {
         StringBuilder str = new StringBuilder(removeFromTo);
 
         return str.delete(0, removeFromTo.lastIndexOf("-") + 1).toString();
     }
 
-    private void readFile(String filename) {
+    private void readFile(final String filename) {
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filename));

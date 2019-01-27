@@ -23,8 +23,8 @@ public class DirectionPathServiceImpl implements DirectionPathService {
     private ObservableList<String> itemsWithGradleProject = FXCollections.observableArrayList();
 
     @Override
-    public void saveDirectionBasePath(TextField basePathInput, ListView<String> projectsFromPathMaven,
-                                      ListView<String> projectsFromPathGradle, final String value, TextArea resultOutput) {
+    public void saveDirectionBasePath(final TextField basePathInput, final ListView<String> projectsFromPathMaven,
+                                      final ListView<String> projectsFromPathGradle, final String value, final TextArea resultOutput) {
 
         FileRead.PROJECTS_PATH = basePathInput.getText();
 
@@ -49,7 +49,7 @@ public class DirectionPathServiceImpl implements DirectionPathService {
         setProjects(value, stockArr, projectsFromPathMaven, projectsFromPathGradle);
     }
 
-    private void setProjects(final String value, Path[] stockArr, ListView<String> projectsFromPathMaven, ListView<String> projectsFromPathGradle){
+    private void setProjects(final String value, final Path[] stockArr, final ListView<String> projectsFromPathMaven, final ListView<String> projectsFromPathGradle){
         switch (value) {
             case "pom.xml":
                 for (Path s : stockArr) {

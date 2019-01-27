@@ -103,12 +103,12 @@ public class Controller implements Initializable {
 
     @FXML
     void mvnBuildButton(ActionEvent event) {
-        mavenService.buildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, resultOutput);
+        mavenService.buildButton(mavenHomePath, projectsCandidateToMaven, mavenOrderReadyList, resultOutput, basePathInput, mavenHomePath);
     }
 
     @FXML
     void gradleBuildButton(ActionEvent event) {
-        gradleService.buildButton(gradleHomePath, projectsCandidateToGradle, gradleOrderReadyList, resultOutput);
+        gradleService.buildButton(gradleHomePath, projectsCandidateToGradle, gradleOrderReadyList, resultOutput, basePathInput, mavenHomePath);
     }
 
     @Override

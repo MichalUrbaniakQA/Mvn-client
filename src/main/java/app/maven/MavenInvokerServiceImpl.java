@@ -2,6 +2,7 @@ package app.maven;
 
 import app.util.FileRead;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import org.apache.maven.shared.invoker.*;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,12 @@ import java.util.Collections;
 class MavenInvokerServiceImpl implements MavenInvokerService {
 
     @Override
-    public void mvnBuild(StringBuilder resultAppendString, final String detailsPath, final String commandFinal, TextArea resultOutput, String errorMessage) {
+    public void mvnBuild(final StringBuilder resultAppendString, final String detailsPath, final String commandFinal,
+                         final TextArea resultOutput, String errorMessage, final TextField basePathInput, final TextField mavenHomePath) {
         try {
-            invoker().execute(setInvocationRequest(detailsPath, commandFinal));
+            invoker(mavenHomePath).execute(setInvocationRequest(detailsPath, commandFinal, basePathInput));
 
-            exitCodeStatus(resultAppendString, invocationResult(detailsPath, commandFinal), detailsPath, errorMessage);
+            exitCodeStatus(resultAppendString, invocationResult(detailsPath, commandFinal, basePathInput, mavenHomePath), detailsPath, errorMessage);
 
         } catch (MavenInvocationException e) {
             errorMessage = e.getMessage();
@@ -29,26 +31,27 @@ class MavenInvokerServiceImpl implements MavenInvokerService {
         addInvokerResult(resultOutput, resultAppendString);
     }
 
-    private InvocationRequest setInvocationRequest(final String detailsPath, final String commandFinal){
+    private InvocationRequest setInvocationRequest(final String detailsPath, final String commandFinal, final TextField basePathInput){
         InvocationRequest request = new DefaultInvocationRequest();
-        request.setPomFile(new File(FileRead.PROJECTS_PATH + "/" + detailsPath));
+        request.setPomFile(new File(basePathInput.getText()+ "/" + detailsPath));
         request.setGoals(Collections.singletonList(commandFinal));
 
         return request;
     }
 
-    private Invoker invoker(){
+    private Invoker invoker(final TextField mavenHomePath){
         Invoker invoker = new DefaultInvoker();
-        invoker.setMavenHome(new File(System.getenv(FileRead.MAVEN_PATH)));
+        invoker.setMavenHome(new File(System.getenv(mavenHomePath.getText())));
 
         return invoker;
     }
 
-    private InvocationResult invocationResult(final String detailsPath, final String commandFinal) throws MavenInvocationException {
-        return invoker().execute(setInvocationRequest(detailsPath, commandFinal));
+    private InvocationResult invocationResult(final String detailsPath, final String commandFinal,
+                                              final TextField basePathInput, final TextField mavenHomePath) throws MavenInvocationException {
+        return invoker(mavenHomePath).execute(setInvocationRequest(detailsPath, commandFinal, basePathInput));
     }
 
-    private void exitCodeStatus(StringBuilder resultAppendString, InvocationResult result, String detailsPath, String errorMessage){
+    private void exitCodeStatus(final StringBuilder resultAppendString, final InvocationResult result, final String detailsPath, final String errorMessage){
         switch (result.getExitCode()){
             case 1:
                 exitCodeFail(resultAppendString, result, detailsPath, errorMessage);
@@ -59,7 +62,7 @@ class MavenInvokerServiceImpl implements MavenInvokerService {
         }
     }
 
-    private void exitCodeSuccess(StringBuilder resultAppendString, InvocationResult result, String detailsPath) {
+    private void exitCodeSuccess(final StringBuilder resultAppendString, final InvocationResult result, final String detailsPath) {
         resultAppendString
                 .append("Project - ")
                 .append(detailsPath)
@@ -69,7 +72,7 @@ class MavenInvokerServiceImpl implements MavenInvokerService {
                 .append("\n");
     }
 
-    private void exitCodeFail(StringBuilder resultAppendString, InvocationResult result, String detailsPath, String errorMessage) {
+    private void exitCodeFail(final StringBuilder resultAppendString, final InvocationResult result, final String detailsPath, String errorMessage) {
         if (result.getExecutionException() != null) {
             errorMessage = result.getExecutionException().getMessage();
             resultAppendString
@@ -92,7 +95,7 @@ class MavenInvokerServiceImpl implements MavenInvokerService {
         }
     }
 
-    private void addInvokerResult(TextArea resultOutput, StringBuilder resultAppendString) {
+    private void addInvokerResult(final TextArea resultOutput, final StringBuilder resultAppendString) {
         resultOutput.setText(resultAppendString.toString());
     }
 }

@@ -30,7 +30,7 @@ public class GitServiceImpl implements GitService {
 
     private List<Ref> local = null;
 
-    private void setConfig(ListView<String> project, TextArea resultOutput) {
+    private void setConfig(final ListView<String> project, final TextArea resultOutput) {
         this.cp = new UsernamePasswordCredentialsProvider(FileRead.EMAIL, FileRead.PASS);
 
         try {
@@ -42,20 +42,20 @@ public class GitServiceImpl implements GitService {
     }
 
     @Override
-    public void gitBuild(final TextField branchName, ListView<String> listOfBranch, TextArea resultOutput) {
+    public void gitBuild(final TextField branchName, final ListView<String> listOfBranch, final TextArea resultOutput) {
         gitCheckout(listOfBranch, resultOutput);
         gitPull(branchName, resultOutput);
     }
 
     @Override
-    public void getLocalBranches(ListView<String> listOfBranch, ListView<String> project, TextArea resultOutput) {
+    public void getLocalBranches(final ListView<String> listOfBranch, final ListView<String> project, final TextArea resultOutput) {
         setConfig(project, resultOutput);
         returnBranchList(resultOutput);
         setBranchesShortNames();
         listOfBranch.setItems(localBranches);
     }
 
-    private void gitCheckout(ListView<String> listOfBranch, TextArea resultOutput){
+    private void gitCheckout(final ListView<String> listOfBranch, final TextArea resultOutput){
         try {
             git.checkout().setName(listOfBranch.getSelectionModel().getSelectedItem().replace("[", "").replace("]", "")).call();
         } catch (GitAPIException e) {
@@ -63,7 +63,7 @@ public class GitServiceImpl implements GitService {
         }
     }
 
-    private void gitPull(final TextField branchName, TextArea resultOutput){
+    private void gitPull(final TextField branchName, final TextArea resultOutput){
         PullCommand cmd = git.pull().setRemoteBranchName(branchName.getText()).setCredentialsProvider(cp);
         try {
             cmd.call();
@@ -73,7 +73,7 @@ public class GitServiceImpl implements GitService {
         }
     }
 
-    private void returnBranchList(TextArea resultOutput) {
+    private void returnBranchList(final TextArea resultOutput) {
         try {
             local = git.branchList().call();
         } catch (GitAPIException e) {
@@ -91,7 +91,7 @@ public class GitServiceImpl implements GitService {
         localBranches.add("---------------------------");
     }
 
-    private String setProject(ListView<String> project) {
+    private String setProject(final ListView<String> project) {
         return project.getItems().toString().replace("[", "").replace("]", "");
     }
 }
