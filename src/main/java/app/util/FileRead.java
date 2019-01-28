@@ -34,10 +34,9 @@ public class FileRead {
             readFile(filename);
         }catch (Exception e){
             e.getStackTrace();
-            resultOutput.setText(new FileNotFoundException("I don't see config file. \n Are you sure it is in good folder?").toString());
+            resultOutput.setText(new FileNotFoundException("I don't see config file. \n Are you sure it is in good folder? " +
+                    "\n If you sue You are pussy...").toString());
         }
-
-
     }
 
     private String removeUnnesseseryPartFromLine(final String removeFromTo) {
