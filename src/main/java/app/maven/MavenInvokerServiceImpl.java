@@ -41,13 +41,13 @@ class MavenInvokerServiceImpl  implements MavenInvokerService {
 
     private Invoker invoker(final TextField mavenHomePath, final TextArea resultOutput)  {
         Invoker invoker = new DefaultInvoker();
+
         try {
             invoker.setMavenHome(new File(System.getenv(mavenHomePath.getText())));
         } catch (Exception e) {
             e.getStackTrace();
             resultOutput.setText(new MvnIncorrectPathException("Incorrect maven path.").toString());
         }
-
 
         return invoker;
     }

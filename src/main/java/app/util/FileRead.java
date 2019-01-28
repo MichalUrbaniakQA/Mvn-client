@@ -1,5 +1,6 @@
 package app.util;
 
+import javafx.scene.control.TextArea;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -28,8 +29,15 @@ public class FileRead {
         BRANCH_NAME = records.get(5);
     }
 
-    public void setConfigFromFile(final String filename) {
-        readFile(filename);
+    public void setConfigFromFile(final String filename, final TextArea resultOutput) {
+        try {
+            readFile(filename);
+        }catch (Exception e){
+            e.getStackTrace();
+            resultOutput.setText(new FileNotFoundException("I don't see config file. \n Are you sure it is in good folder?").toString());
+        }
+
+
     }
 
     private String removeUnnesseseryPartFromLine(final String removeFromTo) {

@@ -113,7 +113,8 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setValueTo();
+        fileRead();
+        setValueFromFile();
         mavenService.addCommand(mavenOrderCandidate);
         gradleService.addCommand(gradleOrderCandidate);
 
@@ -129,8 +130,11 @@ public class Controller implements Initializable {
 //        mavenOrderReadyList.setOnMouseClicked(this::mavenOrderSelectReady);
     }
 
-    private void setValueTo() {
-        fileRead.setConfigFromFile("config.txt");
+    private void fileRead() {
+        fileRead.setConfigFromFile("config.txt", resultOutput);
+    }
+
+    private void setValueFromFile(){
         basePathInput.setText(FileRead.PROJECTS_PATH);
         mavenHomePath.setText(FileRead.MAVEN_PATH);
         gradleHomePath.setText(FileRead.GRADLE_PATH);
