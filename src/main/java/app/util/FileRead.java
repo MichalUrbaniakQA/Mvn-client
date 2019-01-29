@@ -35,7 +35,7 @@ public class FileRead {
         }catch (Exception e){
             e.getStackTrace();
             resultOutput.setText(new FileNotFoundException("I don't see config file. \n Are you sure it is in good folder? " +
-                    "\n If you sue You are pussy...").toString());
+                    "\n If you sure You are pussy...").toString());
         }
     }
 
