@@ -1,6 +1,0 @@
-mavenPath-MAVEN_HOME
-gradlePath-C:/Gradle/gradle
-projectsPath-D:/Workspace/intelij
-email-cana123cana123@gmail.com
-pass-ziomek123
-branch-master
