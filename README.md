@@ -5,7 +5,6 @@ Client for usage maven command and git pull from the branch.
 Technologies: Java, Javafx, Scene Builder, Spring Boot.
 
 
-
 How to maven:
 - create a jar file 
 - create "config.txt" in the same folder as .jar
@@ -23,8 +22,6 @@ branch-e.g.:develop (default branch),
 - select project
 - select maven command
 - run maven command ("maven" button")
-
-
 
 
 How to git:
