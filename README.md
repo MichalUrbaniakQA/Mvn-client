@@ -8,7 +8,7 @@ Technologies: Java, Javafx, Scene Builder, Spring Boot.
 
 How to:
 - create a jar file 
-- create "config.txt" in the same folder like .jar
+- create "config.txt" in the same folder as .jar
 - in the "config.txt" put: 
 
 mavenPath-e.g.:MAVEN_HOME, 
