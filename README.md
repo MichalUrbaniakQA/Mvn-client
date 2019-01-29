@@ -33,3 +33,4 @@ How to git:
 - select project
 - select local branch to pull from the remote branch 
 - run pull using "git" button
+- You can build many maven projects but You can using git for only one project
