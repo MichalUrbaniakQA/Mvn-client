@@ -1,12 +1,12 @@
 # Mvn-client
 
-Client for usage maven command and git pull from branch.
+Client for usage maven command and git pull from the branch.
 
 Technologies: Java, Javafx, Scene Builder, Spring Boot.
 
 
 
-How to:
+How to maven:
 - create a jar file 
 - create "config.txt" in the same folder as .jar
 - in the "config.txt" put: 
@@ -27,3 +27,9 @@ branch-e.g.:develop (default branch),
 
 
 
+How to git:
+- enter the branch name (but you have name of branch from config.txt) or change it
+- enter path to project ("submit" button)
+- select project
+- select local branch to pull from the remote branch 
+- run pull using "git" button
